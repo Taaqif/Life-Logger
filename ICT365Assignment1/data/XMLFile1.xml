@@ -1,0 +1,71 @@
+﻿<?xml version="1.0"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2001/12/soap-envelope" SOAP-ENV:encodingStyle="http://www.w3.org/2001/12/soap-encoding" >
+  <SOAP-ENV:Body xmlns:lle="http://www.xyz.org/lifelogevents" >
+    <lle:User>
+      <lle:name>Test Name</lle:name>
+    </lle:User>
+    <lle:Event>
+      <lle:eventid>ID1</lle:eventid>
+      <lle:tweet>
+        <lle:text>This is some tweet in my day</lle:text>
+        <lle:location>
+          <lle:lat>-31.9000036680578</lle:lat>
+          <lle:long>115.772037506104</lle:long>
+        </lle:location>
+        <lle:datetimestamp>datetimestamp</lle:datetimestamp>
+      </lle:tweet>
+    </lle:Event>
+    <lle:Event>
+      <lle:eventid>ID2</lle:eventid>
+      <lle:facebook-status-update>
+        <lle:text>This is some status update in my day</lle:text>
+        <lle:location>
+          <lle:lat>-31.9082373635957</lle:lat>
+          <lle:long>115.786113739014</lle:long>
+        </lle:location>
+        <lle:datetimestamp>datetimestamp</lle:datetimestamp>
+      </lle:facebook-status-update>
+    </lle:Event>
+    <lle:Event>
+      <lle:eventid>ID3</lle:eventid>
+      <lle:photo>
+        <lle:filepath>photos/image.png</lle:filepath>
+        <lle:location>
+          <lle:lat>-31.8934453305103</lle:lat>
+          <lle:long>115.786113739014</lle:long>
+        </lle:location>
+      </lle:photo>
+    </lle:Event>
+    <lle:Event>
+      <lle:eventid>ID4</lle:eventid>
+      <lle:video>
+        <lle:filepath>/videos/film.mp4</lle:filepath>
+        <lle:location>
+          <lle:lat>115.759592056274</lle:lat>
+          <lle:long>-31.8930080913957</lle:long>
+        </lle:location>
+        <lle:start-time>
+          <lle:datetimestamp>datetimestamp</lle:datetimestamp>
+        </lle:start-time>
+        <lle:end-time>
+          <lle:datetimestamp>datetimestamp</lle:datetimestamp>
+        </lle:end-time>
+      </lle:video>
+    </lle:Event>
+    <!--<lle:Event>
+      <lle:eventid>ID5</lle:eventid>
+      <lle:tracklog>
+        <lle:filepath>/tracklog/track.gpx</lle:filepath>
+        <lle:data>
+          .....
+        </lle:data>
+        <lle:start-time>
+          <lle:datetimestamp>datetimestamp</lle:datetimestamp>
+        </lle:start-time>
+        <lle:end-time>
+          <lle:datetimestamp>datetimestamp</lle:datetimestamp>
+        </lle:end-time>
+      </lle:tracklog>
+    </lle:Event>-->
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
