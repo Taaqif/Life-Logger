@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -67,10 +68,10 @@ namespace ICT365Assignment1
         public override void Render()
         {
             MapHelper mh = MapHelper.Instance();
-            string iconPath = null;
-            iconPath = "facebook.png";
+            
+           
             string tooltip = this.Text;
-            mh.AddMarker("facebook", new Bitmap(iconPath), this.Location, tooltip, this);
+            mh.AddMarker("facebook", new Bitmap(Properties.Resources.facebook), this.Location, tooltip, this);
         }
 
         

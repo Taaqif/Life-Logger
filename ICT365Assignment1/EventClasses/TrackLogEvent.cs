@@ -3,6 +3,7 @@ using GMap.NET.WindowsForms.Markers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -103,14 +104,19 @@ namespace ICT365Assignment1
                 name = track.Name;
                 mh.AddRoute("tracklog", points);
             }
-            Bitmap start = new Bitmap("start.png");
-            Bitmap end = new Bitmap("end.png");
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            
+            //used to resize the bitmap
+            Bitmap start = new Bitmap(Properties.Resources.start);
+            Bitmap end = new Bitmap(Properties.Resources.end);
             int size = 20;
+
             mh.AddMarker("tracklog", new Bitmap(end, size, size), new Coordinates(points[0].Lat, points[0].Lng), "Track start\n" + name, this);
             mh.AddMarker("tracklog", new Bitmap(start, size,size), new Coordinates(points[points.Count - 1].Lat, points[points.Count - 1].Lng), "Track end\n" + name, this);
             List<XMLTracklogLoader.WayPoints> waypoints = XMLTracklogLoader.GetWaypoints(this.Filepath);
             List<PointLatLng> waypoint = new List<PointLatLng>();
-            Bitmap wpimage = new Bitmap("waypoint.png");
+
+            Bitmap wpimage = new Bitmap(Properties.Resources.waypoint);
             foreach (var point in waypoints)
             {
                 

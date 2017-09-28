@@ -33,6 +33,7 @@
             this.mapContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.insertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.linkEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -44,10 +45,27 @@
             this.radiusInput = new System.Windows.Forms.TextBox();
             this.searchRadiusLabel = new System.Windows.Forms.Label();
             this.ToolboxEventFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.legendLabel = new System.Windows.Forms.Label();
+            this.linkPictureBox = new System.Windows.Forms.PictureBox();
+            this.trackPictureBox = new System.Windows.Forms.PictureBox();
+            this.waypointPictureBox = new System.Windows.Forms.PictureBox();
+            this.twitterPictureBox = new System.Windows.Forms.PictureBox();
+            this.facebookPictureBox = new System.Windows.Forms.PictureBox();
+            this.facebookLabel = new System.Windows.Forms.Label();
+            this.twitterLabel = new System.Windows.Forms.Label();
+            this.wayPointlabel = new System.Windows.Forms.Label();
+            this.trackLabel = new System.Windows.Forms.Label();
+            this.linkLabel = new System.Windows.Forms.Label();
             this.mapContextMenu.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.Toolbox.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.linkPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.waypointPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.facebookPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mapCtrl
@@ -104,6 +122,11 @@
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
             this.viewToolStripMenuItem.Text = "View surrounding events";
             this.viewToolStripMenuItem.Click += new System.EventHandler(this.viewToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(201, 6);
             // 
             // linkEventsToolStripMenuItem
             // 
@@ -205,6 +228,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ToolboxEventFlowLayout.AutoScroll = true;
+            this.ToolboxEventFlowLayout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ToolboxEventFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ToolboxEventFlowLayout.Location = new System.Drawing.Point(6, 95);
             this.ToolboxEventFlowLayout.Name = "ToolboxEventFlowLayout";
@@ -212,16 +236,142 @@
             this.ToolboxEventFlowLayout.TabIndex = 0;
             this.ToolboxEventFlowLayout.WrapContents = false;
             // 
-            // toolStripSeparator1
+            // panel1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(201, 6);
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.linkLabel);
+            this.panel1.Controls.Add(this.trackLabel);
+            this.panel1.Controls.Add(this.wayPointlabel);
+            this.panel1.Controls.Add(this.twitterLabel);
+            this.panel1.Controls.Add(this.facebookLabel);
+            this.panel1.Controls.Add(this.linkPictureBox);
+            this.panel1.Controls.Add(this.trackPictureBox);
+            this.panel1.Controls.Add(this.waypointPictureBox);
+            this.panel1.Controls.Add(this.twitterPictureBox);
+            this.panel1.Controls.Add(this.facebookPictureBox);
+            this.panel1.Controls.Add(this.legendLabel);
+            this.panel1.Location = new System.Drawing.Point(610, 407);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(132, 181);
+            this.panel1.TabIndex = 6;
+            // 
+            // legendLabel
+            // 
+            this.legendLabel.AutoSize = true;
+            this.legendLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legendLabel.Location = new System.Drawing.Point(4, 4);
+            this.legendLabel.Name = "legendLabel";
+            this.legendLabel.Size = new System.Drawing.Size(81, 24);
+            this.legendLabel.TabIndex = 0;
+            this.legendLabel.Text = "Legend";
+            // 
+            // linkPictureBox
+            // 
+            this.linkPictureBox.Image = global::ICT365Assignment1.Properties.Resources.link;
+            this.linkPictureBox.InitialImage = null;
+            this.linkPictureBox.Location = new System.Drawing.Point(8, 151);
+            this.linkPictureBox.Name = "linkPictureBox";
+            this.linkPictureBox.Size = new System.Drawing.Size(26, 21);
+            this.linkPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.linkPictureBox.TabIndex = 5;
+            this.linkPictureBox.TabStop = false;
+            // 
+            // trackPictureBox
+            // 
+            this.trackPictureBox.Image = global::ICT365Assignment1.Properties.Resources.start_end_track;
+            this.trackPictureBox.InitialImage = null;
+            this.trackPictureBox.Location = new System.Drawing.Point(8, 113);
+            this.trackPictureBox.Name = "trackPictureBox";
+            this.trackPictureBox.Size = new System.Drawing.Size(51, 32);
+            this.trackPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.trackPictureBox.TabIndex = 4;
+            this.trackPictureBox.TabStop = false;
+            // 
+            // waypointPictureBox
+            // 
+            this.waypointPictureBox.Image = global::ICT365Assignment1.Properties.Resources.waypoint;
+            this.waypointPictureBox.InitialImage = null;
+            this.waypointPictureBox.Location = new System.Drawing.Point(8, 86);
+            this.waypointPictureBox.Name = "waypointPictureBox";
+            this.waypointPictureBox.Size = new System.Drawing.Size(26, 21);
+            this.waypointPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.waypointPictureBox.TabIndex = 3;
+            this.waypointPictureBox.TabStop = false;
+            // 
+            // twitterPictureBox
+            // 
+            this.twitterPictureBox.Image = global::ICT365Assignment1.Properties.Resources.twitter;
+            this.twitterPictureBox.InitialImage = null;
+            this.twitterPictureBox.Location = new System.Drawing.Point(8, 59);
+            this.twitterPictureBox.Name = "twitterPictureBox";
+            this.twitterPictureBox.Size = new System.Drawing.Size(26, 21);
+            this.twitterPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.twitterPictureBox.TabIndex = 2;
+            this.twitterPictureBox.TabStop = false;
+            // 
+            // facebookPictureBox
+            // 
+            this.facebookPictureBox.Image = global::ICT365Assignment1.Properties.Resources.facebook;
+            this.facebookPictureBox.InitialImage = null;
+            this.facebookPictureBox.Location = new System.Drawing.Point(8, 32);
+            this.facebookPictureBox.Name = "facebookPictureBox";
+            this.facebookPictureBox.Size = new System.Drawing.Size(26, 21);
+            this.facebookPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.facebookPictureBox.TabIndex = 1;
+            this.facebookPictureBox.TabStop = false;
+            // 
+            // facebookLabel
+            // 
+            this.facebookLabel.AutoSize = true;
+            this.facebookLabel.Location = new System.Drawing.Point(39, 40);
+            this.facebookLabel.Name = "facebookLabel";
+            this.facebookLabel.Size = new System.Drawing.Size(86, 13);
+            this.facebookLabel.TabIndex = 6;
+            this.facebookLabel.Text = "Facebook Event";
+            // 
+            // twitterLabel
+            // 
+            this.twitterLabel.AutoSize = true;
+            this.twitterLabel.Location = new System.Drawing.Point(39, 67);
+            this.twitterLabel.Name = "twitterLabel";
+            this.twitterLabel.Size = new System.Drawing.Size(70, 13);
+            this.twitterLabel.TabIndex = 7;
+            this.twitterLabel.Text = "Twitter Event";
+            // 
+            // wayPointlabel
+            // 
+            this.wayPointlabel.AutoSize = true;
+            this.wayPointlabel.Location = new System.Drawing.Point(39, 94);
+            this.wayPointlabel.Name = "wayPointlabel";
+            this.wayPointlabel.Size = new System.Drawing.Size(83, 13);
+            this.wayPointlabel.TabIndex = 8;
+            this.wayPointlabel.Text = "Track Waypoint";
+            // 
+            // trackLabel
+            // 
+            this.trackLabel.AutoSize = true;
+            this.trackLabel.Location = new System.Drawing.Point(60, 123);
+            this.trackLabel.Name = "trackLabel";
+            this.trackLabel.Size = new System.Drawing.Size(49, 13);
+            this.trackLabel.TabIndex = 9;
+            this.trackLabel.Text = "Tracklog";
+            // 
+            // linkLabel
+            // 
+            this.linkLabel.AutoSize = true;
+            this.linkLabel.Location = new System.Drawing.Point(40, 159);
+            this.linkLabel.Name = "linkLabel";
+            this.linkLabel.Size = new System.Drawing.Size(63, 13);
+            this.linkLabel.TabIndex = 10;
+            this.linkLabel.Text = "Event Links";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1023, 600);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.Toolbox);
             this.Controls.Add(this.mapCtrl);
             this.Controls.Add(this.menuStrip);
@@ -235,6 +385,13 @@
             this.menuStrip.PerformLayout();
             this.Toolbox.ResumeLayout(false);
             this.Toolbox.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.linkPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.waypointPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.twitterPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.facebookPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,5 +415,17 @@
         private System.Windows.Forms.Label InfoLabel;
         private System.Windows.Forms.ToolStripMenuItem removeLinksToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label legendLabel;
+        private System.Windows.Forms.PictureBox waypointPictureBox;
+        private System.Windows.Forms.PictureBox twitterPictureBox;
+        private System.Windows.Forms.PictureBox facebookPictureBox;
+        private System.Windows.Forms.PictureBox trackPictureBox;
+        private System.Windows.Forms.PictureBox linkPictureBox;
+        private System.Windows.Forms.Label linkLabel;
+        private System.Windows.Forms.Label trackLabel;
+        private System.Windows.Forms.Label wayPointlabel;
+        private System.Windows.Forms.Label twitterLabel;
+        private System.Windows.Forms.Label facebookLabel;
     }
 }

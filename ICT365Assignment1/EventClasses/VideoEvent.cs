@@ -12,14 +12,7 @@ namespace ICT365Assignment1
         public string Filepath
         {
             get { return (string)CustomProperties["Filepath"]; }
-            set {if (value.Trim().Length > 0)
-                {
-                    CustomProperties["Text"] = value;
-                }
-                else
-                {
-                    throw new ArgumentException("String cannot be empty");
-                }}
+            set { CustomProperties["Filepath"] = value; }
         }
 
         public override Panel CreatePanel()
@@ -62,7 +55,7 @@ namespace ICT365Assignment1
             filepathText.Text = this.Filepath;
 
             Label linkHeading = new Label();
-            linkHeading.Text = "\nLiks to event:";
+            linkHeading.Text = "\nLinks to event:";
             linkHeading.AutoSize = true;
             Label linkLabel = new Label();
             linkLabel.AutoSize = true;
@@ -102,7 +95,7 @@ namespace ICT365Assignment1
             }
             catch(ArgumentException)
             {
-                thumb = new Bitmap("error.png");
+               thumb = new Bitmap(Properties.Resources.error);
             }
             
             MapHelper mh = MapHelper.Instance();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -69,10 +70,9 @@ namespace ICT365Assignment1
 
         public override void Render()
         {
-            string iconPath;
-            iconPath = "twitter.png";
+            
             MapHelper mh = MapHelper.Instance();
-            mh.AddMarker("twitter", new Bitmap(iconPath), this.Location, this.Text, this);
+            mh.AddMarker("twitter", new Bitmap(Properties.Resources.twitter), this.Location, this.Text, this);
 
         }
 

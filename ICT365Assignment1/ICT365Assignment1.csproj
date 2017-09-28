@@ -34,12 +34,15 @@
   <ItemGroup>
     <Reference Include="GMap.NET.Core">
       <HintPath>lib\GMap.NET.Core.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="GMap.NET.WindowsForms">
       <HintPath>lib\GMap.NET.WindowsForms.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="NReco.VideoConverter">
       <HintPath>lib\NReco.VideoConverter.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,46 +57,46 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddEventForm.cs">
+    <Compile Include="Forms\AddEventForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddEventForm.Designer.cs">
+    <Compile Include="Forms\AddEventForm.Designer.cs">
       <DependentUpon>AddEventForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EventClasses\Event.cs" />
     <Compile Include="EventClasses\EventFactory.cs" />
     <Compile Include="EventClasses\FacebookEvent.cs" />
-    <Compile Include="EventDetailsForm.cs">
+    <Compile Include="Forms\EventDetailsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EventDetailsForm.Designer.cs">
+    <Compile Include="Forms\EventDetailsForm.Designer.cs">
       <DependentUpon>EventDetailsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Interface\IRenderable.cs" />
-    <Compile Include="EventsHelper.cs" />
+    <Compile Include="HelperClasses\EventsHelper.cs" />
     <Compile Include="Interface\IXml.cs" />
-    <Compile Include="Coordinates.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="HelperClasses\Coordinates.cs" />
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EventClasses\PhotoEvent.cs" />
-    <Compile Include="MapHelper.cs" />
+    <Compile Include="HelperClasses\MapHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventClasses\TrackLogEvent.cs" />
     <Compile Include="EventClasses\TwitterEvent.cs" />
     <Compile Include="EventClasses\VideoEvent.cs" />
-    <Compile Include="XMLTracklogLoader.cs" />
-    <EmbeddedResource Include="AddEventForm.resx">
+    <Compile Include="HelperClasses\XMLTracklogLoader.cs" />
+    <EmbeddedResource Include="Forms\AddEventForm.resx">
       <DependentUpon>AddEventForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EventDetailsForm.resx">
+    <EmbeddedResource Include="Forms\EventDetailsForm.resx">
       <DependentUpon>EventDetailsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -104,6 +107,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -119,19 +123,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data\XMLFile1.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <EmbeddedResource Include="Images\end.png" />
+    <EmbeddedResource Include="Images\error.png" />
+    <EmbeddedResource Include="Images\facebook.png" />
+    <EmbeddedResource Include="Images\start.png" />
+    <EmbeddedResource Include="Images\twitter.png" />
+    <EmbeddedResource Include="Images\waypoint.png" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="AxWMPLib">
-      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>aximp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
     <COMReference Include="WMPLib">
       <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -141,6 +140,15 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\photos\image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\start_end_track.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\link.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

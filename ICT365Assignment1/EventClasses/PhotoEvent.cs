@@ -107,7 +107,8 @@ namespace ICT365Assignment1
             catch (ArgumentException e)
             {
                 //Have error image here 
-                thumb = new Bitmap("error.png");
+                
+                thumb = new Bitmap(Properties.Resources.error);
             }
             
             mh.AddMarker("photo", new Bitmap(thumb, size, size), this.Location, "Photo", this);
