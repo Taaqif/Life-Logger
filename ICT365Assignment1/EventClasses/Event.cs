@@ -19,9 +19,9 @@ namespace ICT365Assignment1
         public Coordinates Location { get => location; set => location = value; }
         public DateTime Datetimestamp { get => datetimestamp; set => datetimestamp = value; }
         public string ID { get => id; set => id = value; }
-        public List<string> Links { get => links; set => links = value; }
+        public HashSet<string> Links { get => links; set => links = value; }
 
-        private List<string> links = new List<string>();
+        private HashSet<string> links = new HashSet<string>();
         private Coordinates location = new Coordinates();
         private DateTime datetimestamp = new DateTime();
         public abstract void Render();

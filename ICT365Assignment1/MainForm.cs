@@ -25,12 +25,22 @@ namespace ICT365Assignment1
         int globalX, globalY;
         XNamespace ns = XNamespace.Get("http://www.xyz.org/lifelogevents");
         Dictionary<String, Event> EventDictionary = new Dictionary<string, Event>();
-        private bool linking;
-        private List<Event> eventLinks = new List<Event>(); 
+        private bool link;
+        private HashSet<Event> eventLinks = new HashSet<Event>();
+        private bool unlink;
+
         public MainForm()
         {
             InitializeComponent();
-            loadData("lle.xml");
+            try
+            {
+                loadData("lle.xml");
+            }
+            catch (FileNotFoundException)
+            {
+                openToolStripMenuItem_Click(null, null);
+            }
+            
         }
 
         public void loadData(string file)
@@ -53,7 +63,7 @@ namespace ICT365Assignment1
 
         private void mapCtrl_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Right && !linking)
+            if (e.Button == System.Windows.Forms.MouseButtons.Right && !link)
             {
                 globalX = e.X;
                 globalY = e.Y;
@@ -90,20 +100,19 @@ namespace ICT365Assignment1
         {
             if(e.Button == System.Windows.Forms.MouseButtons.Left && item.Tag is Event)
             {
-                if (linking)
+                if (link)
                 {
                     AddLink((Event)item.Tag);
+                }
+                else if (unlink)
+                {
+                    RemoveLink((Event)item.Tag);
                 }
                 else
                 {
                     EventDetailsForm f = EventDetailsForm.Instance();
                     f.Details = ((Event)item.Tag).CreatePanel();
                     f.StartPosition = FormStartPosition.CenterParent;
-                    //EventDetailsForm f = new EventDetailsForm()
-                    //{
-                    //    Details = ((Event)item.Tag).CreatePanel(),
-                    //    StartPosition = FormStartPosition.CenterParent
-                    //};
                     f.ShowDialog();
                 }
                 
@@ -112,21 +121,55 @@ namespace ICT365Assignment1
             //Console.WriteLine(String.Format("Marker {0} was clicked.", item.Tag));
         }
 
+        private void RemoveLink(Event e)
+        {
+            if (eventLinks.Count < 2)
+            {
+                eventLinks.Add(e);
+
+            }
+            if (eventLinks.Count == 2)
+            {
+                if (eh.UnLinkEvents(eventLinks.ElementAt(0), eventLinks.ElementAt(1)))
+                {
+                    MessageBox.Show("Events unlinked");
+                }
+                else
+                {
+                    MessageBox.Show("Error unlinking events");
+                }
+                StopLinking();
+            }
+        }
+
         private void AddLink(Event e)
         {
             if(eventLinks.Count < 2)
             {
                 eventLinks.Add(e);
+                
             }
             if (eventLinks.Count == 2)
-            {
-                linking = false;
-                
-                eh.LinkEvents(eventLinks[0], eventLinks[1]);
-                eventLinks = new List<Event>();
+            {  
+                if(eh.LinkEvents(eventLinks.ElementAt(0), eventLinks.ElementAt(1)))
+                {
+                    MessageBox.Show("Events linked");
+                }
+                else
+                {
+                    MessageBox.Show("Error linking events");
+                }
+                StopLinking();
             }
         }
-
+        private void StopLinking()
+        {
+            //reset the links 
+            eventLinks = new HashSet<Event>();
+            link = false;
+            unlink = false;
+            ToolboxEventFlowLayout.Controls.Clear();
+        }
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             
@@ -183,13 +226,23 @@ namespace ICT365Assignment1
             Label linkingInfo = new Label();
             linkingInfo.AutoSize = true;
             linkingInfo.Text = "Click on two events to link them";
-            linking = true;
+            link = true;
+            Button clearButton = new Button();
+            clearButton.Text = "Clear Selection";
+            clearButton.Click += new EventHandler(ClearLinksSelection);
+            ToolboxEventFlowLayout.Controls.Add(clearButton);
             ToolboxEventFlowLayout.Controls.Add(linkingInfo);
+        }
+
+        private void ClearLinksSelection(object sender, EventArgs e)
+        {
+            StopLinking();
         }
 
         private void radiusInput_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+        (e.KeyChar != '.'))
             {
                 e.Handled = true;
             }
@@ -198,6 +251,20 @@ namespace ICT365Assignment1
         private void radiusInput_TextChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void removeLinksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolboxEventFlowLayout.Controls.Clear();
+            Label linkingInfo = new Label();
+            linkingInfo.AutoSize = true;
+            linkingInfo.Text = "Click on two events to unlink them";
+            unlink = true;
+            Button clearButton = new Button();
+            clearButton.Text = "Clear Selection";
+            clearButton.Click += new EventHandler(ClearLinksSelection);
+            ToolboxEventFlowLayout.Controls.Add(clearButton);
+            ToolboxEventFlowLayout.Controls.Add(linkingInfo);
         }
 
         private void insertToolStripMenuItem_Click(object sender, EventArgs e)

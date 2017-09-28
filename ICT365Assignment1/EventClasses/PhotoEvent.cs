@@ -46,12 +46,24 @@ namespace ICT365Assignment1
             filepathText.Text = this.Filepath;
             Label dateText = new Label();
             dateText.AutoSize = true;
-            dateText.Text = this.Datetimestamp.ToString();
+            dateText.Text = "Date: " + this.Datetimestamp.ToString();
+
+            Label linkHeading = new Label();
+            linkHeading.Text = "\nLiks to event:";
+            linkHeading.AutoSize = true;
+            Label linkLabel = new Label();
+            linkLabel.AutoSize = true;
+            foreach (string link in this.Links)
+            {
+                linkLabel.Text += link + "\n";
+            }
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
             container.Controls.Add(pb);
             container.Controls.Add(filepathText);
+            container.Controls.Add(linkHeading);
+            container.Controls.Add(linkLabel);
 
             return container;
         }
@@ -92,7 +104,7 @@ namespace ICT365Assignment1
             {
                 thumb = new Bitmap(iconPath);
             }
-            catch (FileNotFoundException e)
+            catch (ArgumentException e)
             {
                 //Have error image here 
                 thumb = new Bitmap("error.png");

@@ -151,8 +151,9 @@ namespace ICT365Assignment1
                 selectedText = ((RadioButton)sender).Text;
 
             container.Controls.Clear();
-
-
+            Label infoLabel = new Label();
+            infoLabel.Text = "Note: tracklog events will be inserted at the first point on the GPX track";
+            infoLabel.AutoSize = true;
             Button b = new Button();
             b.Text = "Open Tracklog";
             b.Click += new EventHandler(OpenTracklog);
@@ -162,7 +163,7 @@ namespace ICT365Assignment1
             textLabel.AutoSize = true;
 
 
-
+            container.Controls.Add(infoLabel);
             container.Controls.Add(b);
             container.Controls.Add(textLabel);
         }

@@ -34,14 +34,17 @@
             this.insertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.linkEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Toolbox = new System.Windows.Forms.GroupBox();
-            this.ToolboxEventFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.searchRadiusLabel = new System.Windows.Forms.Label();
+            this.InfoLabel = new System.Windows.Forms.Label();
             this.radiusInput = new System.Windows.Forms.TextBox();
+            this.searchRadiusLabel = new System.Windows.Forms.Label();
+            this.ToolboxEventFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mapContextMenu.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.Toolbox.SuspendLayout();
@@ -71,7 +74,7 @@
             this.mapCtrl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.mapCtrl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.mapCtrl.ShowTileGridLines = false;
-            this.mapCtrl.Size = new System.Drawing.Size(559, 471);
+            this.mapCtrl.Size = new System.Drawing.Size(730, 561);
             this.mapCtrl.TabIndex = 0;
             this.mapCtrl.Zoom = 0D;
             this.mapCtrl.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
@@ -82,9 +85,11 @@
             this.mapContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.insertToolStripMenuItem,
             this.viewToolStripMenuItem,
-            this.linkEventsToolStripMenuItem});
+            this.toolStripSeparator1,
+            this.linkEventsToolStripMenuItem,
+            this.removeLinksToolStripMenuItem});
             this.mapContextMenu.Name = "mapContextMenu";
-            this.mapContextMenu.Size = new System.Drawing.Size(205, 70);
+            this.mapContextMenu.Size = new System.Drawing.Size(205, 98);
             // 
             // insertToolStripMenuItem
             // 
@@ -107,13 +112,20 @@
             this.linkEventsToolStripMenuItem.Text = "Link events";
             this.linkEventsToolStripMenuItem.Click += new System.EventHandler(this.linkEventsToolStripMenuItem_Click);
             // 
+            // removeLinksToolStripMenuItem
+            // 
+            this.removeLinksToolStripMenuItem.Name = "removeLinksToolStripMenuItem";
+            this.removeLinksToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.removeLinksToolStripMenuItem.Text = "Remove links";
+            this.removeLinksToolStripMenuItem.Click += new System.EventHandler(this.removeLinksToolStripMenuItem_Click);
+            // 
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(863, 24);
+            this.menuStrip.Size = new System.Drawing.Size(1023, 24);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
             this.menuStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip_ItemClicked);
@@ -146,37 +158,27 @@
             this.Toolbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Toolbox.AutoSize = true;
+            this.Toolbox.Controls.Add(this.InfoLabel);
             this.Toolbox.Controls.Add(this.radiusInput);
             this.Toolbox.Controls.Add(this.searchRadiusLabel);
             this.Toolbox.Controls.Add(this.ToolboxEventFlowLayout);
-            this.Toolbox.Location = new System.Drawing.Point(577, 27);
+            this.Toolbox.Location = new System.Drawing.Point(748, 27);
             this.Toolbox.Name = "Toolbox";
-            this.Toolbox.Size = new System.Drawing.Size(277, 471);
+            this.Toolbox.Size = new System.Drawing.Size(266, 561);
             this.Toolbox.TabIndex = 5;
             this.Toolbox.TabStop = false;
             this.Toolbox.Text = "Toolbox";
             // 
-            // ToolboxEventFlowLayout
+            // InfoLabel
             // 
-            this.ToolboxEventFlowLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ToolboxEventFlowLayout.AutoScroll = true;
-            this.ToolboxEventFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ToolboxEventFlowLayout.Location = new System.Drawing.Point(6, 49);
-            this.ToolboxEventFlowLayout.Name = "ToolboxEventFlowLayout";
-            this.ToolboxEventFlowLayout.Size = new System.Drawing.Size(265, 402);
-            this.ToolboxEventFlowLayout.TabIndex = 0;
-            this.ToolboxEventFlowLayout.WrapContents = false;
-            // 
-            // searchRadiusLabel
-            // 
-            this.searchRadiusLabel.AutoSize = true;
-            this.searchRadiusLabel.Location = new System.Drawing.Point(7, 20);
-            this.searchRadiusLabel.Name = "searchRadiusLabel";
-            this.searchRadiusLabel.Size = new System.Drawing.Size(106, 13);
-            this.searchRadiusLabel.TabIndex = 1;
-            this.searchRadiusLabel.Text = "Search Radius (Kms)";
+            this.InfoLabel.AutoSize = true;
+            this.InfoLabel.Location = new System.Drawing.Point(7, 40);
+            this.InfoLabel.Name = "InfoLabel";
+            this.InfoLabel.Size = new System.Drawing.Size(206, 52);
+            this.InfoLabel.TabIndex = 3;
+            this.InfoLabel.Text = "Drag the map by left clicking and moving. \r\nUse the mousewheel to zoom.\r\nRight-cl" +
+    "ick on the map to perform actions. \r\nLeft-click on an event to view more details" +
+    "\r\n";
             // 
             // radiusInput
             // 
@@ -188,17 +190,44 @@
             this.radiusInput.TextChanged += new System.EventHandler(this.radiusInput_TextChanged);
             this.radiusInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.radiusInput_KeyPress);
             // 
+            // searchRadiusLabel
+            // 
+            this.searchRadiusLabel.AutoSize = true;
+            this.searchRadiusLabel.Location = new System.Drawing.Point(7, 20);
+            this.searchRadiusLabel.Name = "searchRadiusLabel";
+            this.searchRadiusLabel.Size = new System.Drawing.Size(106, 13);
+            this.searchRadiusLabel.TabIndex = 1;
+            this.searchRadiusLabel.Text = "Search Radius (Kms)";
+            // 
+            // ToolboxEventFlowLayout
+            // 
+            this.ToolboxEventFlowLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ToolboxEventFlowLayout.AutoScroll = true;
+            this.ToolboxEventFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.ToolboxEventFlowLayout.Location = new System.Drawing.Point(6, 95);
+            this.ToolboxEventFlowLayout.Name = "ToolboxEventFlowLayout";
+            this.ToolboxEventFlowLayout.Size = new System.Drawing.Size(254, 460);
+            this.ToolboxEventFlowLayout.TabIndex = 0;
+            this.ToolboxEventFlowLayout.WrapContents = false;
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(201, 6);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(863, 510);
+            this.ClientSize = new System.Drawing.Size(1023, 600);
             this.Controls.Add(this.Toolbox);
             this.Controls.Add(this.mapCtrl);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Life Logger v1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.mapContextMenu.ResumeLayout(false);
@@ -226,5 +255,8 @@
         private System.Windows.Forms.ToolStripMenuItem linkEventsToolStripMenuItem;
         private System.Windows.Forms.TextBox radiusInput;
         private System.Windows.Forms.Label searchRadiusLabel;
+        private System.Windows.Forms.Label InfoLabel;
+        private System.Windows.Forms.ToolStripMenuItem removeLinksToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

@@ -44,7 +44,6 @@ namespace ICT365Assignment1
             trackName.AutoSize = true;
             trackName.Text = "TrackName: " + XMLTracklogLoader.GetTrackName(this.Filepath);
             List<XMLTracklogLoader.WayPoints> waypoints = XMLTracklogLoader.GetWaypoints(this.Filepath);
-            List<PointLatLng> waypoint = new List<PointLatLng>();
             Label waypointHeading = new Label();
             waypointHeading.Text = "\nWaypoints";
             waypointHeading.AutoSize = true;
@@ -57,13 +56,26 @@ namespace ICT365Assignment1
             
             Label dateText = new Label();
             dateText.AutoSize = true;
-            dateText.Text = this.Datetimestamp.ToString();
+            dateText.Text = "Date: " + this.Datetimestamp.ToString();
+
+            Label linkHeading = new Label();
+            linkHeading.Text = "\nLinks to event: ";
+            linkHeading.AutoSize = true;
+            Label linkLabel = new Label();
+            linkLabel.AutoSize = true;
+            foreach(string link in this.Links)
+            {
+                linkLabel.Text += link + "\n";
+            }
+            
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
             container.Controls.Add(trackName);
             container.Controls.Add(waypointHeading);
             container.Controls.Add(waypointLabel);
+            container.Controls.Add(linkHeading);
+            container.Controls.Add(linkLabel);
 
             return container;
         }

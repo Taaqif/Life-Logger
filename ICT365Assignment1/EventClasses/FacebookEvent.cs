@@ -34,15 +34,25 @@ namespace ICT365Assignment1
             locationText.Text = this.Location.ToString();
             Label dateText = new Label();
             dateText.AutoSize = true;
-            dateText.Text = this.Datetimestamp.ToString();
+            dateText.Text = "Date: " + this.Datetimestamp.ToString();
 
             Label infoText = new Label();
             infoText.Text = this.Text;
-
+            Label linkHeading = new Label();
+            linkHeading.Text = "\nLinks to event:";
+            linkHeading.AutoSize = true;
+            Label linkLabel = new Label();
+            linkLabel.AutoSize = true;
+            foreach (string link in this.Links)
+            {
+                linkLabel.Text += link + "\n";
+            }
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
             container.Controls.Add(infoText);
+            container.Controls.Add(linkHeading);
+            container.Controls.Add(linkLabel);
 
             return container;
         }

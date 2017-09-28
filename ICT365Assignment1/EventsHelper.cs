@@ -40,7 +40,7 @@ namespace ICT365Assignment1
             }
             catch (FileNotFoundException e)
             {
-                throw new ArgumentException("File not found");
+                throw new FileNotFoundException("File not found");
             }
             doc = document;
             PopulateEvents();
@@ -61,7 +61,8 @@ namespace ICT365Assignment1
             {
                 IncrementID();
                 var newEvent = new XElement(ns + "Event",
-                                new XElement(ns + "eventid", highestID));
+                                new XElement(ns + "eventid", highestID),
+                                new XElement(ns + "link"));
                 newEvent.Add(e.ToXElement(ns));
                 //switch (e)
                 //{
@@ -102,11 +103,77 @@ namespace ICT365Assignment1
             
         }
 
-        public void LinkEvents(Event event1, Event event2)
+        internal bool UnLinkEvents(Event event1, Event event2)
         {
-            event1.Links.Add(event2.ID);
-            //add and save new links here 
-            mh.DrawLine("links", event1.Location, event2.Location, Color.Green);
+            bool unlinked = false;
+            if (event1.Links.Remove(event2.ID))
+            {
+                doc.Descendants(ns + "Event")
+                    .Where(id => id.Element(ns + "eventid").Value == event1.ID)
+                    .Single()
+                    .Element(ns + "link")
+                    .Descendants(ns + "eventid")
+                    .Where(id => id.Value == event2.ID)
+                    .Single()
+                    .Remove();
+                unlinked = true;
+            }
+            if (event2.Links.Remove(event1.ID))
+            {
+                doc.Descendants(ns + "Event")
+                    .Where(id => id.Element(ns + "eventid").Value == event2.ID)
+                    .Single()
+                    .Element(ns + "link")
+                    .Descendants(ns + "eventid")
+                    .Where(id => id.Value == event1.ID)
+                    .Single()
+                    .Remove();
+                unlinked = true;
+            }
+            if (unlinked)
+            {
+                doc.Save(file);
+                mh.Clear("links_" + event1.ID);
+                mh.Clear("links_" + event2.ID);
+            }
+
+
+
+            return unlinked;
+        }
+
+        public bool LinkEvents(Event event1, Event event2)
+        {
+            
+            bool linked = false;
+            if (event1.Links.Add(event2.ID))
+            {
+                doc.Descendants(ns + "Event")
+                    .Where(id => id.Element(ns + "eventid").Value == event1.ID)
+                    .Single()
+                    .Element(ns + "link")
+                    .Add(new XElement(ns + "eventid", event2.ID));
+                linked = true;
+            }
+            if (event2.Links.Add(event1.ID))
+            {
+                doc.Descendants(ns + "Event")
+                    .Where(id => id.Element(ns + "eventid").Value == event2.ID)
+                    .Single()
+                    .Element(ns + "link")
+                    .Add(new XElement(ns + "eventid", event1.ID));
+                linked = true;
+            }
+            if (linked)
+            {
+                doc.Save(file);
+                mh.DrawLine("links", event1.Location, event2.Location, Color.Green);
+            }
+            
+            
+            
+            return linked;
+            
         }
         public Event GetEvent(string ID)
         {
@@ -241,7 +308,7 @@ namespace ICT365Assignment1
                 @event.Value.Render();
                 foreach(string linkID in @event.Value.Links)
                 {
-                    mh.DrawLine("links", @event.Value.Location, GetEvent(linkID).Location, Color.Green);
+                    mh.DrawLine("links_" + linkID, @event.Value.Location, GetEvent(linkID).Location, Color.Green);
                 }
                 //TODO: make each seperate function
                 //double longitude, latitude;
