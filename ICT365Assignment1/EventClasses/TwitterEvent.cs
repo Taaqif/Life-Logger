@@ -76,14 +76,14 @@ namespace ICT365Assignment1
 
         }
 
-        public override XElement ToXElement(XNamespace ns)
+        public override XElement ToXElement(XNamespace lle)
         {
-            XElement eventElement = new XElement(ns + "tweet",
-                        new XElement(ns + "text", this.CustomProperties["Text"]),
-                        new XElement(ns + "location",
-                            new XElement(ns + "lat", this.Location.Latitude),
-                            new XElement(ns + "long", this.Location.Longitude)),
-                        new XElement(ns + "datetimestamp", this.Datetimestamp));
+            XElement eventElement = new XElement(lle + "tweet",
+                        new XElement(lle + "text", this.CustomProperties["Text"]),
+                        new XElement(lle + "location",
+                            new XElement(lle + "lat", this.Location.Latitude),
+                            new XElement(lle + "long", this.Location.Longitude)),
+                        new XElement(lle + "datetimestamp", this.Datetimestamp));
             return eventElement;
         }
     } 

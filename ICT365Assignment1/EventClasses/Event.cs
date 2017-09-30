@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ICT365Assignment1
 {
-    public abstract class Event : IRenderable, IXml
+    public abstract class Event : IRenderable, IXml, IWinFormPanel
     {
         public Event()
         {

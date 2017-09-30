@@ -46,17 +46,22 @@
             this.searchRadiusLabel = new System.Windows.Forms.Label();
             this.ToolboxEventFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.legendLabel = new System.Windows.Forms.Label();
+            this.linkLabel = new System.Windows.Forms.Label();
+            this.trackLabel = new System.Windows.Forms.Label();
+            this.wayPointlabel = new System.Windows.Forms.Label();
+            this.twitterLabel = new System.Windows.Forms.Label();
+            this.facebookLabel = new System.Windows.Forms.Label();
             this.linkPictureBox = new System.Windows.Forms.PictureBox();
             this.trackPictureBox = new System.Windows.Forms.PictureBox();
             this.waypointPictureBox = new System.Windows.Forms.PictureBox();
             this.twitterPictureBox = new System.Windows.Forms.PictureBox();
             this.facebookPictureBox = new System.Windows.Forms.PictureBox();
-            this.facebookLabel = new System.Windows.Forms.Label();
-            this.twitterLabel = new System.Windows.Forms.Label();
-            this.wayPointlabel = new System.Windows.Forms.Label();
-            this.trackLabel = new System.Windows.Forms.Label();
-            this.linkLabel = new System.Windows.Forms.Label();
+            this.legendLabel = new System.Windows.Forms.Label();
+            this.mapLocationLabel = new System.Windows.Forms.Label();
+            this.locationTextBox = new System.Windows.Forms.TextBox();
+            this.goToButton = new System.Windows.Forms.Button();
+            this.mouseCoordinates = new System.Windows.Forms.Label();
+            this.mapCoordinatesLabel = new System.Windows.Forms.Label();
             this.mapContextMenu.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.Toolbox.SuspendLayout();
@@ -92,11 +97,12 @@
             this.mapCtrl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.mapCtrl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.mapCtrl.ShowTileGridLines = false;
-            this.mapCtrl.Size = new System.Drawing.Size(730, 561);
+            this.mapCtrl.Size = new System.Drawing.Size(758, 640);
             this.mapCtrl.TabIndex = 0;
             this.mapCtrl.Zoom = 0D;
             this.mapCtrl.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
             this.mapCtrl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mapCtrl_MouseClick);
+            this.mapCtrl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mapCtrl_MouseMove);
             // 
             // mapContextMenu
             // 
@@ -148,10 +154,9 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1023, 24);
+            this.menuStrip.Size = new System.Drawing.Size(1072, 24);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "menuStrip1";
-            this.menuStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -181,13 +186,18 @@
             this.Toolbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Toolbox.AutoSize = true;
+            this.Toolbox.Controls.Add(this.mapCoordinatesLabel);
+            this.Toolbox.Controls.Add(this.mouseCoordinates);
+            this.Toolbox.Controls.Add(this.goToButton);
+            this.Toolbox.Controls.Add(this.locationTextBox);
+            this.Toolbox.Controls.Add(this.mapLocationLabel);
             this.Toolbox.Controls.Add(this.InfoLabel);
             this.Toolbox.Controls.Add(this.radiusInput);
             this.Toolbox.Controls.Add(this.searchRadiusLabel);
             this.Toolbox.Controls.Add(this.ToolboxEventFlowLayout);
-            this.Toolbox.Location = new System.Drawing.Point(748, 27);
+            this.Toolbox.Location = new System.Drawing.Point(776, 27);
             this.Toolbox.Name = "Toolbox";
-            this.Toolbox.Size = new System.Drawing.Size(266, 561);
+            this.Toolbox.Size = new System.Drawing.Size(287, 640);
             this.Toolbox.TabIndex = 5;
             this.Toolbox.TabStop = false;
             this.Toolbox.Text = "Toolbox";
@@ -195,7 +205,7 @@
             // InfoLabel
             // 
             this.InfoLabel.AutoSize = true;
-            this.InfoLabel.Location = new System.Drawing.Point(7, 40);
+            this.InfoLabel.Location = new System.Drawing.Point(6, 93);
             this.InfoLabel.Name = "InfoLabel";
             this.InfoLabel.Size = new System.Drawing.Size(206, 52);
             this.InfoLabel.TabIndex = 3;
@@ -210,13 +220,12 @@
             this.radiusInput.Size = new System.Drawing.Size(26, 20);
             this.radiusInput.TabIndex = 2;
             this.radiusInput.Text = "2";
-            this.radiusInput.TextChanged += new System.EventHandler(this.radiusInput_TextChanged);
             this.radiusInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.radiusInput_KeyPress);
             // 
             // searchRadiusLabel
             // 
             this.searchRadiusLabel.AutoSize = true;
-            this.searchRadiusLabel.Location = new System.Drawing.Point(7, 20);
+            this.searchRadiusLabel.Location = new System.Drawing.Point(3, 20);
             this.searchRadiusLabel.Name = "searchRadiusLabel";
             this.searchRadiusLabel.Size = new System.Drawing.Size(106, 13);
             this.searchRadiusLabel.TabIndex = 1;
@@ -230,9 +239,9 @@
             this.ToolboxEventFlowLayout.AutoScroll = true;
             this.ToolboxEventFlowLayout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ToolboxEventFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.ToolboxEventFlowLayout.Location = new System.Drawing.Point(6, 95);
+            this.ToolboxEventFlowLayout.Location = new System.Drawing.Point(6, 148);
             this.ToolboxEventFlowLayout.Name = "ToolboxEventFlowLayout";
-            this.ToolboxEventFlowLayout.Size = new System.Drawing.Size(254, 460);
+            this.ToolboxEventFlowLayout.Size = new System.Drawing.Size(275, 486);
             this.ToolboxEventFlowLayout.TabIndex = 0;
             this.ToolboxEventFlowLayout.WrapContents = false;
             // 
@@ -251,20 +260,55 @@
             this.panel1.Controls.Add(this.twitterPictureBox);
             this.panel1.Controls.Add(this.facebookPictureBox);
             this.panel1.Controls.Add(this.legendLabel);
-            this.panel1.Location = new System.Drawing.Point(610, 407);
+            this.panel1.Location = new System.Drawing.Point(638, 486);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(132, 181);
             this.panel1.TabIndex = 6;
             // 
-            // legendLabel
+            // linkLabel
             // 
-            this.legendLabel.AutoSize = true;
-            this.legendLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.legendLabel.Location = new System.Drawing.Point(4, 4);
-            this.legendLabel.Name = "legendLabel";
-            this.legendLabel.Size = new System.Drawing.Size(81, 24);
-            this.legendLabel.TabIndex = 0;
-            this.legendLabel.Text = "Legend";
+            this.linkLabel.AutoSize = true;
+            this.linkLabel.Location = new System.Drawing.Point(40, 159);
+            this.linkLabel.Name = "linkLabel";
+            this.linkLabel.Size = new System.Drawing.Size(63, 13);
+            this.linkLabel.TabIndex = 10;
+            this.linkLabel.Text = "Event Links";
+            // 
+            // trackLabel
+            // 
+            this.trackLabel.AutoSize = true;
+            this.trackLabel.Location = new System.Drawing.Point(39, 123);
+            this.trackLabel.Name = "trackLabel";
+            this.trackLabel.Size = new System.Drawing.Size(49, 13);
+            this.trackLabel.TabIndex = 9;
+            this.trackLabel.Text = "Tracklog";
+            // 
+            // wayPointlabel
+            // 
+            this.wayPointlabel.AutoSize = true;
+            this.wayPointlabel.Location = new System.Drawing.Point(39, 94);
+            this.wayPointlabel.Name = "wayPointlabel";
+            this.wayPointlabel.Size = new System.Drawing.Size(83, 13);
+            this.wayPointlabel.TabIndex = 8;
+            this.wayPointlabel.Text = "Track Waypoint";
+            // 
+            // twitterLabel
+            // 
+            this.twitterLabel.AutoSize = true;
+            this.twitterLabel.Location = new System.Drawing.Point(39, 67);
+            this.twitterLabel.Name = "twitterLabel";
+            this.twitterLabel.Size = new System.Drawing.Size(70, 13);
+            this.twitterLabel.TabIndex = 7;
+            this.twitterLabel.Text = "Twitter Event";
+            // 
+            // facebookLabel
+            // 
+            this.facebookLabel.AutoSize = true;
+            this.facebookLabel.Location = new System.Drawing.Point(39, 40);
+            this.facebookLabel.Name = "facebookLabel";
+            this.facebookLabel.Size = new System.Drawing.Size(86, 13);
+            this.facebookLabel.TabIndex = 6;
+            this.facebookLabel.Text = "Facebook Event";
             // 
             // linkPictureBox
             // 
@@ -281,7 +325,7 @@
             // 
             this.trackPictureBox.Image = global::ICT365Assignment1.Properties.Resources.start_end_track;
             this.trackPictureBox.InitialImage = null;
-            this.trackPictureBox.Location = new System.Drawing.Point(8, 113);
+            this.trackPictureBox.Location = new System.Drawing.Point(-4, 113);
             this.trackPictureBox.Name = "trackPictureBox";
             this.trackPictureBox.Size = new System.Drawing.Size(51, 32);
             this.trackPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -321,56 +365,67 @@
             this.facebookPictureBox.TabIndex = 1;
             this.facebookPictureBox.TabStop = false;
             // 
-            // facebookLabel
+            // legendLabel
             // 
-            this.facebookLabel.AutoSize = true;
-            this.facebookLabel.Location = new System.Drawing.Point(39, 40);
-            this.facebookLabel.Name = "facebookLabel";
-            this.facebookLabel.Size = new System.Drawing.Size(86, 13);
-            this.facebookLabel.TabIndex = 6;
-            this.facebookLabel.Text = "Facebook Event";
+            this.legendLabel.AutoSize = true;
+            this.legendLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.legendLabel.Location = new System.Drawing.Point(4, 4);
+            this.legendLabel.Name = "legendLabel";
+            this.legendLabel.Size = new System.Drawing.Size(81, 24);
+            this.legendLabel.TabIndex = 0;
+            this.legendLabel.Text = "Legend";
             // 
-            // twitterLabel
+            // mapLocationLabel
             // 
-            this.twitterLabel.AutoSize = true;
-            this.twitterLabel.Location = new System.Drawing.Point(39, 67);
-            this.twitterLabel.Name = "twitterLabel";
-            this.twitterLabel.Size = new System.Drawing.Size(70, 13);
-            this.twitterLabel.TabIndex = 7;
-            this.twitterLabel.Text = "Twitter Event";
+            this.mapLocationLabel.AutoSize = true;
+            this.mapLocationLabel.Location = new System.Drawing.Point(6, 46);
+            this.mapLocationLabel.Name = "mapLocationLabel";
+            this.mapLocationLabel.Size = new System.Drawing.Size(73, 13);
+            this.mapLocationLabel.TabIndex = 4;
+            this.mapLocationLabel.Text = "Go to location";
             // 
-            // wayPointlabel
+            // locationTextBox
             // 
-            this.wayPointlabel.AutoSize = true;
-            this.wayPointlabel.Location = new System.Drawing.Point(39, 94);
-            this.wayPointlabel.Name = "wayPointlabel";
-            this.wayPointlabel.Size = new System.Drawing.Size(83, 13);
-            this.wayPointlabel.TabIndex = 8;
-            this.wayPointlabel.Text = "Track Waypoint";
+            this.locationTextBox.Location = new System.Drawing.Point(85, 43);
+            this.locationTextBox.Name = "locationTextBox";
+            this.locationTextBox.Size = new System.Drawing.Size(127, 20);
+            this.locationTextBox.TabIndex = 5;
+            this.locationTextBox.Text = "Perth, WA";
+            this.locationTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.locationTextBox_KeyDown);
             // 
-            // trackLabel
+            // goToButton
             // 
-            this.trackLabel.AutoSize = true;
-            this.trackLabel.Location = new System.Drawing.Point(60, 123);
-            this.trackLabel.Name = "trackLabel";
-            this.trackLabel.Size = new System.Drawing.Size(49, 13);
-            this.trackLabel.TabIndex = 9;
-            this.trackLabel.Text = "Tracklog";
+            this.goToButton.Location = new System.Drawing.Point(218, 42);
+            this.goToButton.Name = "goToButton";
+            this.goToButton.Size = new System.Drawing.Size(42, 21);
+            this.goToButton.TabIndex = 6;
+            this.goToButton.Text = "Go";
+            this.goToButton.UseVisualStyleBackColor = true;
+            this.goToButton.Click += new System.EventHandler(this.goToButton_Click);
             // 
-            // linkLabel
+            // mouseCoordinates
             // 
-            this.linkLabel.AutoSize = true;
-            this.linkLabel.Location = new System.Drawing.Point(40, 159);
-            this.linkLabel.Name = "linkLabel";
-            this.linkLabel.Size = new System.Drawing.Size(63, 13);
-            this.linkLabel.TabIndex = 10;
-            this.linkLabel.Text = "Event Links";
+            this.mouseCoordinates.AutoSize = true;
+            this.mouseCoordinates.Location = new System.Drawing.Point(6, 71);
+            this.mouseCoordinates.Name = "mouseCoordinates";
+            this.mouseCoordinates.Size = new System.Drawing.Size(63, 13);
+            this.mouseCoordinates.TabIndex = 7;
+            this.mouseCoordinates.Text = "Coordinates";
+            // 
+            // mapCoordinatesLabel
+            // 
+            this.mapCoordinatesLabel.AutoSize = true;
+            this.mapCoordinatesLabel.Location = new System.Drawing.Point(70, 71);
+            this.mapCoordinatesLabel.Name = "mapCoordinatesLabel";
+            this.mapCoordinatesLabel.Size = new System.Drawing.Size(49, 13);
+            this.mapCoordinatesLabel.TabIndex = 8;
+            this.mapCoordinatesLabel.Text = "Lat Long";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1023, 600);
+            this.ClientSize = new System.Drawing.Size(1072, 679);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.Toolbox);
             this.Controls.Add(this.mapCtrl);
@@ -379,7 +434,6 @@
             this.Name = "MainForm";
             this.Text = "Life Logger v1.0";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.mapContextMenu.ResumeLayout(false);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -427,5 +481,10 @@
         private System.Windows.Forms.Label wayPointlabel;
         private System.Windows.Forms.Label twitterLabel;
         private System.Windows.Forms.Label facebookLabel;
+        private System.Windows.Forms.Button goToButton;
+        private System.Windows.Forms.TextBox locationTextBox;
+        private System.Windows.Forms.Label mapLocationLabel;
+        private System.Windows.Forms.Label mapCoordinatesLabel;
+        private System.Windows.Forms.Label mouseCoordinates;
     }
 }

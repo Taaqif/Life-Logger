@@ -23,11 +23,11 @@ namespace ICT365Assignment1
         MapHelper mh;
         EventsHelper eh;
         int globalX, globalY;
-        XNamespace ns = XNamespace.Get("http://www.xyz.org/lifelogevents");
         Dictionary<String, Event> EventDictionary = new Dictionary<string, Event>();
         private bool link;
         private HashSet<Event> eventLinks = new HashSet<Event>();
         private bool unlink;
+        private string defaultLocation = "Perth, WA";
 
         public MainForm()
         {
@@ -38,7 +38,7 @@ namespace ICT365Assignment1
             }
             catch (FileNotFoundException)
             {
-                openToolStripMenuItem_Click(null, null);
+                openToolStripMenuItem_Click(this, new EventArgs());
             }
             
         }
@@ -50,14 +50,17 @@ namespace ICT365Assignment1
             eh.loadFromXML(file);
             mh.AssignMapControl(mapCtrl);
             mh.ConfigMap();
+            if (!mh.SetMapCenterLocation(locationTextBox.Text))
+            {
+                mh.SetMapCenterLocation(defaultLocation);
+                MessageBox.Show("Could not set location, defaulting to " +  defaultLocation);
+            }
             eh.renderEvents();
         }
 
         
         private void MainForm_Load(object sender, EventArgs e)
-        {
-            
-            
+        {   
 
         }
 
@@ -69,14 +72,11 @@ namespace ICT365Assignment1
                 globalY = e.Y;
                 
                 mapContextMenu.Show(mapCtrl, e.Location);
+                
             }
             
         }
 
-        private void menuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -92,10 +92,6 @@ namespace ICT365Assignment1
             }
         }
 
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
-
-        }
         private void gmap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
             if(e.Button == System.Windows.Forms.MouseButtons.Left && item.Tag is Event)
@@ -248,10 +244,6 @@ namespace ICT365Assignment1
             }
         }
 
-        private void radiusInput_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
 
         private void removeLinksToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -267,15 +259,40 @@ namespace ICT365Assignment1
             ToolboxEventFlowLayout.Controls.Add(linkingInfo);
         }
 
+        private void goToButton_Click(object sender, EventArgs e)
+        {
+            if (!mh.SetMapCenterLocation(locationTextBox.Text))
+            {
+                mh.SetMapCenterLocation(defaultLocation);
+                MessageBox.Show("Could not set location, defaulting to " + defaultLocation);
+            }
+        }
+
+        private void locationTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                goToButton_Click(this, e);
+                e.SuppressKeyPress = true;
+            }
+        }
+
+        private void mapCtrl_MouseMove(object sender, MouseEventArgs e)
+        {
+            double longitude = mapCtrl.FromLocalToLatLng(e.X, e.Y).Lng;
+            double latitude = mapCtrl.FromLocalToLatLng(e.X, e.Y).Lat;
+            mapCoordinatesLabel.Text = latitude + " " + longitude;
+        }
+
         private void insertToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            double X = mapCtrl.FromLocalToLatLng(globalX, globalY).Lng;
-            double Y = mapCtrl.FromLocalToLatLng(globalX, globalY).Lat;
+            double longitude = mapCtrl.FromLocalToLatLng(globalX, globalY).Lng;
+            double latitudde = mapCtrl.FromLocalToLatLng(globalX, globalY).Lat;
 
             AddEventForm f = new AddEventForm()
             {
-                Latitude = Y,
-                Longitude = X,
+                Latitude = latitudde,
+                Longitude = longitude,
 
                 StartPosition = FormStartPosition.CenterParent
             };

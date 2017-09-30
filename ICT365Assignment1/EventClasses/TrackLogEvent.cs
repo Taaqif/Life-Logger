@@ -100,11 +100,11 @@ namespace ICT365Assignment1
                 foreach (var point in track.Segments)
                 {
                     points.Add(new PointLatLng(point.Coordinates.Latitude, point.Coordinates.Longitude));
+                    mh.AddMarker("tracklogPoints", new Bitmap(20,20), point.Coordinates, "Date: " + point.Date +"\n" + "elevation: " + point.Elevation, this);
                 }
                 name = track.Name;
                 mh.AddRoute("tracklog", points);
             }
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             
             //used to resize the bitmap
             Bitmap start = new Bitmap(Properties.Resources.start);
@@ -125,14 +125,14 @@ namespace ICT365Assignment1
 
         }
 
-        public override XElement ToXElement(XNamespace ns)
+        public override XElement ToXElement(XNamespace lle)
         {
-            XElement eventElement = new XElement(ns + "tracklog",
-                       new XElement(ns + "filepath", this.CustomProperties["Filepath"]),
-                       new XElement(ns + "location",
-                            new XElement(ns + "lat", this.Location.Latitude),
-                            new XElement(ns + "long", this.Location.Longitude)),
-                       new XElement(ns + "datetimestamp", this.Datetimestamp));
+            XElement eventElement = new XElement(lle + "tracklog",
+                       new XElement(lle + "filepath", this.CustomProperties["Filepath"]),
+                       new XElement(lle + "location",
+                            new XElement(lle + "lat", this.Location.Latitude),
+                            new XElement(lle + "long", this.Location.Longitude)),
+                       new XElement(lle + "datetimestamp", this.Datetimestamp));
             return eventElement;
         }
     }

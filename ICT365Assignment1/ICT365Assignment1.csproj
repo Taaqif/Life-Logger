@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Interface\IRenderable.cs" />
     <Compile Include="HelperClasses\EventsHelper.cs" />
+    <Compile Include="Interface\IWinFormPanel.cs" />
     <Compile Include="Interface\IXml.cs" />
     <Compile Include="HelperClasses\Coordinates.cs" />
     <Compile Include="Forms\MainForm.cs">

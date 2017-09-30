@@ -55,27 +55,27 @@ namespace ICT365Assignment1
            
         private static XNamespace GetNameSpace()
         {
-            XNamespace ns = XNamespace.Get("http://www.topografix.com/GPX/1/1");
-            return ns;
+            XNamespace @namespace = XNamespace.Get("http://www.topografix.com/GPX/1/1");
+            return @namespace;
         }
 
             
         public static List<WayPoints> GetWaypoints(string file)
         {
             XDocument doc = Load(file);
-            XNamespace ns = GetNameSpace();
+            XNamespace namespaces = GetNameSpace();
             List<WayPoints> wayPointList = new List<WayPoints>();
-            var waypoints = from waypoint in doc.Descendants(ns + "wpt")
+            var waypoints = from waypoint in doc.Descendants(namespaces + "wpt")
                             select new
                             {
                                 Latitude = waypoint.Attribute("lat").Value,
                                 Longitude = waypoint.Attribute("lon").Value,
-                                Elevation = waypoint.Element(ns + "ele") != null ?
-                                    waypoint.Element(ns + "ele").Value : null,
-                                Name = waypoint.Element(ns + "name") != null ?
-                                    waypoint.Element(ns + "name").Value : null,
-                                Date = waypoint.Element(ns + "cmt") != null ?
-                                    waypoint.Element(ns + "cmt").Value : null
+                                Elevation = waypoint.Element(namespaces + "ele") != null ?
+                                    waypoint.Element(namespaces + "ele").Value : null,
+                                Name = waypoint.Element(namespaces + "name") != null ?
+                                    waypoint.Element(namespaces + "name").Value : null,
+                                Date = waypoint.Element(namespaces + "cmt") != null ?
+                                    waypoint.Element(namespaces + "cmt").Value : null
                             };
 
             foreach (var wpt in waypoints)
@@ -144,22 +144,22 @@ namespace ICT365Assignment1
         {
             List<Track> trackList = new List<Track>();
             XDocument gpxDoc = Load(file);
-            XNamespace ns = GetNameSpace();
-            var tracks = from track in gpxDoc.Descendants(ns + "trk")
+            XNamespace lle = GetNameSpace();
+            var tracks = from track in gpxDoc.Descendants(lle + "trk")
                             select new
                             {
-                                Name = track.Element(ns + "name") != null ?
-                            track.Element(ns + "name").Value : null,
+                                Name = track.Element(lle + "name") != null ?
+                            track.Element(lle + "name").Value : null,
                                 Segs = (
-                                from trackpoint in track.Descendants(ns + "trkpt")
+                                from trackpoint in track.Descendants(lle + "trkpt")
                                 select new
                                 {
                                     Latitude = trackpoint.Attribute("lat").Value,
                                     Longitude = trackpoint.Attribute("lon").Value,
-                                    Elevation = trackpoint.Element(ns + "ele") != null ?
-                                    trackpoint.Element(ns + "ele").Value : null,
-                                    Time = trackpoint.Element(ns + "time") != null ?
-                                    trackpoint.Element(ns + "time").Value : null
+                                    Elevation = trackpoint.Element(lle + "ele") != null ?
+                                    trackpoint.Element(lle + "ele").Value : null,
+                                    Time = trackpoint.Element(lle + "time") != null ?
+                                    trackpoint.Element(lle + "time").Value : null
                                 }
                                 )
                             };

@@ -42,15 +42,24 @@ namespace ICT365Assignment1
                 throw new Exception("Please assign a map controller");
             }
             mapCtrl.MapProvider = GMapProviders.GoogleMap;
-            mapCtrl.SetPositionByKeywords("Peth, Australia");
-            mapCtrl.MinZoom = 6;
-            mapCtrl.MaxZoom = 24;
+            
+            mapCtrl.MinZoom = 5;
+            mapCtrl.MaxZoom = 17;
             mapCtrl.Zoom = 13;
             mapCtrl.Manager.Mode = AccessMode.ServerAndCache;
             mapCtrl.DragButton = MouseButtons.Left;
             mapCtrl.ShowCenter = false;
             
             mapCtrl.IgnoreMarkerOnMouseWheel = true;
+        }
+        public bool SetMapCenterLocation(string location)
+        {
+            if (mapCtrl.SetPositionByKeywords(location) == GeoCoderStatusCode.G_GEO_SUCCESS)
+            {
+                return true;
+            }
+
+            return false; ;
         }
         public void AddOverlay(string name)
         {
@@ -79,7 +88,8 @@ namespace ICT365Assignment1
                 AddOverlay(overlayName);
             }
             GMarkerGoogle marker;
-            marker = new GMarkerGoogle(new PointLatLng(coordinates.Latitude, coordinates.Longitude), b);
+            //to push the marker down slightly, looks neater
+            marker = new GMarkerGoogle(new PointLatLng(coordinates.Latitude - 0.0003, coordinates.Longitude), b);
             marker.Tag = e;
             if (toolTip != null && toolTip != "")
             {
@@ -131,11 +141,6 @@ namespace ICT365Assignment1
             overlayDictionary["circle"].Clear();
             overlayDictionary["circle"].Markers.Add(center);
             overlayDictionary["circle"].Polygons.Add(gpol);
-        }
-
-        public void DrawLink(Event event1, Event event2)
-        {
-            DrawLine("link", event1.Location, event2.Location, Color.Green);
         }
 
         public void ClearCircle()

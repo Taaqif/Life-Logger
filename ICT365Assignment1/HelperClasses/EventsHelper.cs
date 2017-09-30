@@ -15,8 +15,8 @@ namespace ICT365Assignment1
     {
         MapHelper mh = MapHelper.Instance();
         Dictionary<String, Event> EventDictionary = new Dictionary<string, Event>();
-        XNamespace ns = XNamespace.Get("http://www.xyz.org/lifelogevents");
-        XNamespace nsa = XNamespace.Get("http://www.w3.org/2001/12/soap-envelope");
+        XNamespace lle = XNamespace.Get("http://www.xyz.org/lifelogevents");
+        XNamespace soapENV = XNamespace.Get("http://www.w3.org/2001/12/soap-envelope");
         private static EventsHelper aEvent;
         private string highestID = null;
         String file;
@@ -60,43 +60,15 @@ namespace ICT365Assignment1
             else
             {
                 IncrementID();
-                var newEvent = new XElement(ns + "Event",
-                                new XElement(ns + "eventid", highestID),
-                                new XElement(ns + "link"));
-                newEvent.Add(e.ToXElement(ns));
-                //switch (e)
-                //{
-                //    case FacebookEvent facebook:
-
-                //        break;
-                //    case TwitterEvent twitter:
-                //        newEvent.Add(new XElement(ns + "tweet",
-                //            new XElement(ns + "text", "q"),
-                //            new XElement(ns + "location",
-                //                new XElement(ns + "lat", "1"),
-                //                new XElement(ns + "long", "2")),
-                //            new XElement(ns + "datetimestamp", "datetime")));
-                //        //newEvent.Add(new XElement(ns + "tweet",
-                //        //    new XElement(ns + "text", ""),
-                //        //    new XElement(ns + "location", 
-                //        //        new XElement(ns + "lat", twitter.Location.Latitude),
-                //        //        new XElement(ns + "long", twitter.Location.Longitude)),
-                //        //    new XElement(ns + "datetimestamp", "datetime")));
-                //        break;
-                //    case PhotoEvent photo:
-                //        break;
-                //    case VideoEvent video:
-                //        break;
-                //    case TrackLogEvent tracklog:
-                //        break;
-                //    default:
-                //        break;
-                //}
+                var newEvent = new XElement(lle + "Event",
+                                new XElement(lle + "eventid", highestID),
+                                new XElement(lle + "link"));
+                newEvent.Add(e.ToXElement(lle));
+                
                 e.ID = highestID;
                 EventDictionary.Add(highestID, e);
-                doc.Descendants(nsa + "Body").Single().Add(newEvent);
+                doc.Descendants(soapENV + "Body").Single().Add(newEvent);
                 doc.Save(file);
-                //EventDictionary.Add("ffff", e);
                 e.Render();
             }
             
@@ -108,11 +80,11 @@ namespace ICT365Assignment1
             bool unlinked = false;
             if (event1.Links.Remove(event2.ID))
             {
-                doc.Descendants(ns + "Event")
-                    .Where(id => id.Element(ns + "eventid").Value == event1.ID)
+                doc.Descendants(lle + "Event")
+                    .Where(id => id.Element(lle + "eventid").Value == event1.ID)
                     .Single()
-                    .Element(ns + "link")
-                    .Descendants(ns + "eventid")
+                    .Element(lle + "link")
+                    .Descendants(lle + "eventid")
                     .Where(id => id.Value == event2.ID)
                     .Single()
                     .Remove();
@@ -120,11 +92,11 @@ namespace ICT365Assignment1
             }
             if (event2.Links.Remove(event1.ID))
             {
-                doc.Descendants(ns + "Event")
-                    .Where(id => id.Element(ns + "eventid").Value == event2.ID)
+                doc.Descendants(lle + "Event")
+                    .Where(id => id.Element(lle + "eventid").Value == event2.ID)
                     .Single()
-                    .Element(ns + "link")
-                    .Descendants(ns + "eventid")
+                    .Element(lle + "link")
+                    .Descendants(lle + "eventid")
                     .Where(id => id.Value == event1.ID)
                     .Single()
                     .Remove();
@@ -148,20 +120,20 @@ namespace ICT365Assignment1
             bool linked = false;
             if (event1.Links.Add(event2.ID))
             {
-                doc.Descendants(ns + "Event")
-                    .Where(id => id.Element(ns + "eventid").Value == event1.ID)
+                doc.Descendants(lle + "Event")
+                    .Where(id => id.Element(lle + "eventid").Value == event1.ID)
                     .Single()
-                    .Element(ns + "link")
-                    .Add(new XElement(ns + "eventid", event2.ID));
+                    .Element(lle + "link")
+                    .Add(new XElement(lle + "eventid", event2.ID));
                 linked = true;
             }
             if (event2.Links.Add(event1.ID))
             {
-                doc.Descendants(ns + "Event")
-                    .Where(id => id.Element(ns + "eventid").Value == event2.ID)
+                doc.Descendants(lle + "Event")
+                    .Where(id => id.Element(lle + "eventid").Value == event2.ID)
                     .Single()
-                    .Element(ns + "link")
-                    .Add(new XElement(ns + "eventid", event1.ID));
+                    .Element(lle + "link")
+                    .Add(new XElement(lle + "eventid", event1.ID));
                 linked = true;
             }
             if (linked)
@@ -207,13 +179,13 @@ namespace ICT365Assignment1
             //reset the dictionary
             EventDictionary = new Dictionary<string, Event>();
             
-            foreach (XElement @event in doc.Descendants(ns + "Event"))
+            foreach (XElement @event in doc.Descendants(lle + "Event"))
             {
                 //TODO: Fix this
                 //assumes the last element will always be the one that contains the event details, which it might not be all the time
                 XElement eventDetails = @event.Elements().Last();
                 
-                string id = @event.Element(ns + "eventid").Value;
+                string id = @event.Element(lle + "eventid").Value;
                 if (id.CompareTo(highestID) > 0)
                 {
                     highestID = id;
@@ -224,9 +196,9 @@ namespace ICT365Assignment1
                 string datetime = "";
                 try
                 {
-                    latitude = Double.Parse(eventDetails.Element(ns + "location").Element(ns + "lat").Value);
-                    longitude = Double.Parse(eventDetails.Element(ns + "location").Element(ns + "long").Value);
-                    datetime = eventDetails.Element(ns + "datetimestamp").Value;
+                    latitude = Double.Parse(eventDetails.Element(lle + "location").Element(lle + "lat").Value);
+                    longitude = Double.Parse(eventDetails.Element(lle + "location").Element(lle + "long").Value);
+                    datetime = eventDetails.Element(lle + "datetimestamp").Value;
                 }
                 catch (NullReferenceException)
                 {
@@ -239,25 +211,25 @@ namespace ICT365Assignment1
                 {
                     case "photo":
                         t = EventFactory.CreateEvent(EventFactory.EventType.Photo);
-                        t.CustomProperties["Filepath"] = eventDetails.Element(ns + "filepath").Value;
+                        t.CustomProperties["Filepath"] = eventDetails.Element(lle + "filepath").Value;
                         break;
                     case "tweet":
                         t = EventFactory.CreateEvent(EventFactory.EventType.Twitter);
-                        t.CustomProperties["Text"] = eventDetails.Element(ns + "text").Value;
+                        t.CustomProperties["Text"] = eventDetails.Element(lle + "text").Value;
                         break;
                     case "facebook-status-update":
                         t = EventFactory.CreateEvent(EventFactory.EventType.Facbook);
-                        t.CustomProperties["Text"] = eventDetails.Element(ns + "text").Value;
+                        t.CustomProperties["Text"] = eventDetails.Element(lle + "text").Value;
                         break;
                     case "video":
                         t = EventFactory.CreateEvent(EventFactory.EventType.Video);
-                        t.CustomProperties["Filepath"] = eventDetails.Element(ns + "filepath").Value;
+                        t.CustomProperties["Filepath"] = eventDetails.Element(lle + "filepath").Value;
                         break;
                     
                     case "tracklog":
                         t = EventFactory.CreateEvent(EventFactory.EventType.TrackLog);
                         //t.Location = new Coordinates(latitude, longitude);
-                        t.CustomProperties["Filepath"] = eventDetails.Element(ns + "filepath").Value;
+                        t.CustomProperties["Filepath"] = eventDetails.Element(lle + "filepath").Value;
                         break;
                     default:
                         return;
@@ -284,7 +256,7 @@ namespace ICT365Assignment1
 
                 try
                 {
-                    foreach (XElement linkedEvent in @event.Element(ns + "link").Descendants(ns + "eventid"))
+                    foreach (XElement linkedEvent in @event.Element(lle + "link").Descendants(lle + "eventid"))
                     {
                         t.Links.Add(linkedEvent.Value);
                         

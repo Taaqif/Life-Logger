@@ -210,7 +210,7 @@ namespace ICT365Assignment1
             }
         }
         
-        private void addEventButton_Click(object sender, EventArgs e)
+        public void addEventButton_Click(object sender, EventArgs e)
         {
             Event t;
             try
