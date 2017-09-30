@@ -67,11 +67,11 @@ namespace ICT365Assignment1
         }
         public override void Render()
         {
-            MapHelper mh = MapHelper.Instance();
+            MapHelper mapHelper = MapHelper.Instance();
             
            
             string tooltip = this.Text;
-            mh.AddMarker("facebook", new Bitmap(Properties.Resources.facebook), this.Location, tooltip, this);
+            mapHelper.AddMarker("facebook", new Bitmap(Properties.Resources.facebook), this.Location, tooltip, this);
         }
 
         

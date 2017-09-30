@@ -10,7 +10,7 @@ namespace ICT365Assignment1
     {
         public enum EventType
         {
-            Facbook,
+            Facebook,
             Twitter,
             Photo,
             Video,
@@ -21,7 +21,7 @@ namespace ICT365Assignment1
         {
             switch (e)
             {
-                case EventType.Facbook:
+                case EventType.Facebook:
                     return new FacebookEvent();
                 case EventType.Twitter:
                     return new TwitterEvent();

@@ -65,14 +65,14 @@ namespace ICT365Assignment1
         {
             if(mapCtrl == null)
             {
-                throw new Exception("Please assign a map controller");
+                throw new ArgumentException("Please assign a map controller");
             }
             try
             {
                 overlayDictionary.Add(name, new GMapOverlay(name));
                 mapCtrl.Overlays.Add(overlayDictionary[name]);
             }
-            catch (Exception e)
+            catch (ArgumentException)
             {
                 Console.WriteLine("Overlay exists, not adding");
             }
@@ -117,7 +117,6 @@ namespace ICT365Assignment1
 
             double seg = Math.PI * 2 / segments;
             double aspect = 0.80;
-            int y = 0;
             //draw a circle on the map
             for (int i = 0; i < segments; i++)
             {

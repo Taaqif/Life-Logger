@@ -89,7 +89,7 @@ namespace ICT365Assignment1
             {
                 thumb = new Bitmap(iconPath);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 //Have error image here 
                 

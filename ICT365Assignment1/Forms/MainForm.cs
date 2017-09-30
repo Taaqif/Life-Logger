@@ -20,7 +20,7 @@ namespace ICT365Assignment1
     public partial class MainForm : Form
     {
         GMapOverlay markers = new GMapOverlay("markers");
-        MapHelper mh;
+        MapHelper mapHelper;
         EventsHelper eh;
         int globalX, globalY;
         Dictionary<String, Event> EventDictionary = new Dictionary<string, Event>();
@@ -45,14 +45,14 @@ namespace ICT365Assignment1
 
         public void loadData(string file)
         {
-            mh = MapHelper.Instance();
+            mapHelper = MapHelper.Instance();
             eh = EventsHelper.Instance();
             eh.loadFromXML(file);
-            mh.AssignMapControl(mapCtrl);
-            mh.ConfigMap();
-            if (!mh.SetMapCenterLocation(locationTextBox.Text))
+            mapHelper.AssignMapControl(mapCtrl);
+            mapHelper.ConfigMap();
+            if (!mapHelper.SetMapCenterLocation(locationTextBox.Text))
             {
-                mh.SetMapCenterLocation(defaultLocation);
+                mapHelper.SetMapCenterLocation(defaultLocation);
                 MessageBox.Show("Could not set location, defaulting to " +  defaultLocation);
             }
             eh.renderEvents();
@@ -175,7 +175,7 @@ namespace ICT365Assignment1
             clearButton.Text = "Clear Selection";
             clearButton.Click += new EventHandler(ClearSelection);
             ToolboxEventFlowLayout.Controls.Add(clearButton);
-            mh.Clear("matchlines");
+            mapHelper.Clear("matchlines");
             int numResults = 0;
             int radius = 0;
             try
@@ -189,7 +189,7 @@ namespace ICT365Assignment1
             foreach ( Event ev in eh.GetSurroundingEvents(coordinates, radius))
             {
                 numResults++;
-                mh.DrawLine("matchlines", ev.Location, coordinates, Color.Red);
+                mapHelper.DrawLine("matchlines", ev.Location, coordinates, Color.Red);
 
 
                 ToolboxEventFlowLayout.Controls.Add(ev.CreatePanel());
@@ -201,14 +201,14 @@ namespace ICT365Assignment1
                 resultNr.Text = "No Results Found. Search a different area";
                 ToolboxEventFlowLayout.Controls.Add(resultNr);
             }
-            mh.DrawCircle(coordinates, radius, 50);
+            mapHelper.DrawCircle(coordinates, radius, 50);
         }
 
         private void ClearSelection(object sender, EventArgs e)
         {
             ToolboxEventFlowLayout.Controls.Clear();
-            mh.ClearCircle();
-            mh.Clear("matchlines");
+            mapHelper.ClearCircle();
+            mapHelper.Clear("matchlines");
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -261,9 +261,9 @@ namespace ICT365Assignment1
 
         private void goToButton_Click(object sender, EventArgs e)
         {
-            if (!mh.SetMapCenterLocation(locationTextBox.Text))
+            if (!mapHelper.SetMapCenterLocation(locationTextBox.Text))
             {
-                mh.SetMapCenterLocation(defaultLocation);
+                mapHelper.SetMapCenterLocation(defaultLocation);
                 MessageBox.Show("Could not set location, defaulting to " + defaultLocation);
             }
         }

@@ -35,7 +35,7 @@ namespace ICT365Assignment1
 
             
 
-            MapHelper mh = MapHelper.Instance();
+            MapHelper mapHelper = MapHelper.Instance();
             
             locationText.Text = "Start Location: " + XMLTracklogLoader.GetStartCordinatesOfTrack(this.Filepath);
             
@@ -91,19 +91,24 @@ namespace ICT365Assignment1
         public override void Render()
         {
             List<XMLTracklogLoader.Track> tracks = XMLTracklogLoader.GetTracks(this.Filepath);
-            MapHelper mh = MapHelper.Instance();
+            MapHelper mapHelper = MapHelper.Instance();
 
             List<PointLatLng> points = new List<PointLatLng>();
             string name = null;
+            int indexCount = 0;
             foreach (var track in tracks)
             {
                 foreach (var point in track.Segments)
                 {
                     points.Add(new PointLatLng(point.Coordinates.Latitude, point.Coordinates.Longitude));
-                    mh.AddMarker("tracklogPoints", new Bitmap(20,20), point.Coordinates, "Date: " + point.Date +"\n" + "elevation: " + point.Elevation, this);
+                    if(indexCount != 0 && indexCount != track.Segments.Count -1)
+                    {
+                        mapHelper.AddMarker("tracklogPoints", new Bitmap(20, 20), point.Coordinates, "Date: " + point.Date + "\n" + "elevation: " + point.Elevation, this);
+                    }
+                    indexCount++;
                 }
                 name = track.Name;
-                mh.AddRoute("tracklog", points);
+                mapHelper.AddRoute("tracklog", points);
             }
             
             //used to resize the bitmap
@@ -111,8 +116,8 @@ namespace ICT365Assignment1
             Bitmap end = new Bitmap(Properties.Resources.end);
             int size = 20;
 
-            mh.AddMarker("tracklog", new Bitmap(end, size, size), new Coordinates(points[0].Lat, points[0].Lng), "Track start\n" + name, this);
-            mh.AddMarker("tracklog", new Bitmap(start, size,size), new Coordinates(points[points.Count - 1].Lat, points[points.Count - 1].Lng), "Track end\n" + name, this);
+            mapHelper.AddMarker("tracklog", new Bitmap(end, size, size), new Coordinates(points[0].Lat, points[0].Lng), "Track start\n" + name, this);
+            mapHelper.AddMarker("tracklog", new Bitmap(start, size,size), new Coordinates(points[points.Count - 1].Lat, points[points.Count - 1].Lng), "Track end\n" + name, this);
             List<XMLTracklogLoader.WayPoints> waypoints = XMLTracklogLoader.GetWaypoints(this.Filepath);
             List<PointLatLng> waypoint = new List<PointLatLng>();
 
@@ -120,7 +125,7 @@ namespace ICT365Assignment1
             foreach (var point in waypoints)
             {
                 
-                mh.AddMarker("waypoints", new Bitmap(wpimage,size,size), point.Coordinates, "Track " + name + " Waypoint\n" + point.Name, this);
+                mapHelper.AddMarker("waypoints", new Bitmap(wpimage,size,size), point.Coordinates, "Track " + name + " Waypoint\n" + point.Name, this);
             }
 
         }

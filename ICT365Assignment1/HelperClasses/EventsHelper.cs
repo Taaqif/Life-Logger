@@ -38,7 +38,7 @@ namespace ICT365Assignment1
                 document = XDocument.Load(file);
                 
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException)
             {
                 throw new FileNotFoundException("File not found");
             }
@@ -46,7 +46,7 @@ namespace ICT365Assignment1
             PopulateEvents();
            
         }
-        public void IncrementID()
+        private void IncrementID()
         {
             highestID = Regex.Replace(highestID, @"(\d+)",
                 m => (Convert.ToInt32(m.Groups[1].Value) + 1).ToString());
@@ -75,7 +75,7 @@ namespace ICT365Assignment1
             
         }
 
-        internal bool UnLinkEvents(Event event1, Event event2)
+        public bool UnLinkEvents(Event event1, Event event2)
         {
             bool unlinked = false;
             if (event1.Links.Remove(event2.ID))
@@ -218,7 +218,7 @@ namespace ICT365Assignment1
                         t.CustomProperties["Text"] = eventDetails.Element(lle + "text").Value;
                         break;
                     case "facebook-status-update":
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Facbook);
+                        t = EventFactory.CreateEvent(EventFactory.EventType.Facebook);
                         t.CustomProperties["Text"] = eventDetails.Element(lle + "text").Value;
                         break;
                     case "video":
@@ -282,70 +282,6 @@ namespace ICT365Assignment1
                 {
                     mh.DrawLine("links_" + linkID, @event.Value.Location, GetEvent(linkID).Location, Color.Green);
                 }
-                //TODO: make each seperate function
-                //double longitude, latitude;
-                //longitude = e.Value.Location.Longitude;
-                //latitude = e.Value.Location.Latitude;
-                //string iconPath = null;
-                //switch (e.Value)
-                //{
-                //    case FacebookEvent facebook:
-                //        facebook.Render();
-                //        iconPath = "facebook.png";
-                //        //mh.AddMarker("facebook", new Bitmap(iconPath), latitude, longitude, facebook.Text);
-                //        break;
-                //    case TwitterEvent twitter:
-                //        iconPath = "twitter.png";
-                //        mh.AddMarker("twitter", new Bitmap(iconPath), latitude, longitude, twitter.Text);
-                //        break;
-                //    case PhotoEvent photo:
-                //        iconPath = photo.Filepath;
-                //        Bitmap original = new Bitmap(iconPath);
-                //        mh.AddMarker("photo", new Bitmap(original, 42, 42), latitude, longitude, null);
-                //        break;
-                //    case VideoEvent video:
-                //        Stream thumbJpegStream = new MemoryStream();
-                //        var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-                //        ffMpeg.GetVideoThumbnail(video.Filepath, thumbJpegStream, 5);
-                //        Bitmap orig = new Bitmap(thumbJpegStream);
-                //        mh.AddMarker("video", new Bitmap(orig, 42, 42), latitude, longitude, null);
-                //        break;
-                //    case TrackLogEvent tracklog:
-                //        break;
-                //    default:
-                //        break;
-                //}
-                //if (e.Value.GetType() == typeof(TwitterEvent))
-                //{
-
-                //    iconPath = "twitter.png";
-                //    mh.AddMarker("twitter", new Bitmap(iconPath), latitude, longitude, ((TwitterEvent)e.Value).Text);
-
-                //}
-                //if (e.Value.GetType() == typeof(FacebookEvent))
-                //{
-                //    iconPath = "facebook.png";
-                //    mh.AddMarker("facebook", new Bitmap(iconPath), latitude, longitude, ((FacebookEvent)e.Value).Text);
-
-
-                //}
-                //if (e.Value.GetType() == typeof(PhotoEvent))
-                //{
-                //    iconPath = ((PhotoEvent)e.Value).Filepath;
-                //    Bitmap original = new Bitmap(iconPath);
-                //    mh.AddMarker("photo", new Bitmap(original, 42, 42), latitude, longitude, null);
-
-                //}
-                //if (e.Value.GetType() == typeof(VideoEvent))
-                //{
-                //    Stream thumbJpegStream = new MemoryStream();
-                //    var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-                //    ffMpeg.GetVideoThumbnail(((VideoEvent)e.Value).Filepath, thumbJpegStream, 5);
-                //    Bitmap original = new Bitmap(thumbJpegStream);
-                //    mh.AddMarker("video", new Bitmap(original, 42, 42), latitude, longitude, null);
-
-                //}
-
             }
         }
     }

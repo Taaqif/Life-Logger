@@ -13,7 +13,6 @@ namespace ICT365Assignment1
 {
     public partial class AddEventForm : Form
     {
-        private static AddEventForm aForm = null;
         public string LocationText { get { return locationLabel.Text; } set { locationLabel.Text = value; } }
 
         public double Latitude { get => latitude; set => latitude = value; }
@@ -24,7 +23,7 @@ namespace ICT365Assignment1
 
         MapHelper mh = MapHelper.Instance();
         EventsHelper eh = EventsHelper.Instance();
-        String selectedText;
+        EventFactory.EventType selectedText;
         FlowLayoutPanel container = new FlowLayoutPanel
         {
             FlowDirection = FlowDirection.TopDown,
@@ -65,7 +64,7 @@ namespace ICT365Assignment1
         private void radioSwitchTwitter(object sender, System.EventArgs e)
         {
             if (((RadioButton)sender).Checked)
-                selectedText = ((RadioButton)sender).Text;
+                selectedText = EventFactory.EventType.Twitter;
             container.Controls.Clear();
            
             
@@ -87,7 +86,7 @@ namespace ICT365Assignment1
         private void radioSwitchFacebook(object sender, System.EventArgs e)
         {
             if (((RadioButton)sender).Checked)
-                selectedText = ((RadioButton)sender).Text;
+                selectedText = EventFactory.EventType.Facebook;
 
             container.Controls.Clear();
             
@@ -106,7 +105,7 @@ namespace ICT365Assignment1
         private void radioSwitchVideo(object sender, System.EventArgs e)
         {
             if (((RadioButton)sender).Checked)
-                selectedText = ((RadioButton)sender).Text;
+                selectedText = EventFactory.EventType.Video;
             container.Controls.Clear();
             
             Button b = new Button();
@@ -127,7 +126,7 @@ namespace ICT365Assignment1
         private void radioSwitchPhoto(object sender, System.EventArgs e)
         {
             if (((RadioButton)sender).Checked)
-                selectedText = ((RadioButton)sender).Text;
+                selectedText = EventFactory.EventType.Photo;
 
             container.Controls.Clear();
             
@@ -148,7 +147,7 @@ namespace ICT365Assignment1
         private void radioSwitchTracklog(object sender, System.EventArgs e)
         {
             if (((RadioButton)sender).Checked)
-                selectedText = ((RadioButton)sender).Text;
+                selectedText = EventFactory.EventType.TrackLog;
 
             container.Controls.Clear();
             Label infoLabel = new Label();
@@ -167,7 +166,7 @@ namespace ICT365Assignment1
             container.Controls.Add(b);
             container.Controls.Add(textLabel);
         }
-        public void OpenImage(object sender, System.EventArgs e)
+        private void OpenImage(object sender, System.EventArgs e)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
@@ -181,7 +180,7 @@ namespace ICT365Assignment1
                 }
             }
         }
-        public void OpenVideo(object sender, System.EventArgs e)
+        private void OpenVideo(object sender, System.EventArgs e)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
@@ -195,7 +194,7 @@ namespace ICT365Assignment1
                 }
             }
         }
-        public void OpenTracklog(object sender, System.EventArgs e)
+        private void OpenTracklog(object sender, System.EventArgs e)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
             {
@@ -215,35 +214,30 @@ namespace ICT365Assignment1
             Event t;
             try
             {
+                t = EventFactory.CreateEvent(selectedText);
                 switch (selectedText)
                 {
-                    case "Tweet":
-
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Twitter);
+                    case EventFactory.EventType.Twitter: 
                         t.CustomProperties["Text"] = mainGroupBox.Controls.Find("text", true).Single().Text;
                         t.Location = new Coordinates(latitude, longitude);
                         break;
-                    case "Facebook":
+                    case EventFactory.EventType.Facebook:
 
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Facbook);
                         t.CustomProperties["Text"] = mainGroupBox.Controls.Find("text", true).Single().Text;
                         t.Location = new Coordinates(latitude, longitude);
                         break;
-                    case "Photo":
+                    case EventFactory.EventType.Photo:
 
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Photo);
                         t.CustomProperties["Filepath"] = mainGroupBox.Controls.Find("imageLabel", true).Single().Text;
                         t.Location = new Coordinates(latitude, longitude);
                         break;
-                    case "Video":
+                    case EventFactory.EventType.Video:
 
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Video);
                         t.CustomProperties["Filepath"] = mainGroupBox.Controls.Find("videoLabel", true).Single().Text;
                         t.Location = new Coordinates(latitude, longitude);
                         break;
-                    case "Tracklog":
+                    case EventFactory.EventType.TrackLog:
 
-                        t = EventFactory.CreateEvent(EventFactory.EventType.TrackLog);
                         t.CustomProperties["Filepath"] = mainGroupBox.Controls.Find("tracklogLabel", true).Single().Text;
                         t.Location = XMLTracklogLoader.GetStartCordinatesOfTrack(t.CustomProperties["Filepath"].ToString());
                         break;
