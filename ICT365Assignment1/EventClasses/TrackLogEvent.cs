@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -36,20 +37,24 @@ namespace ICT365Assignment1
             
 
             MapHelper mapHelper = MapHelper.Instance();
+            StringBuilder location = new StringBuilder();
+            location.Append("Start Location: ");
+            location.AppendLine(XMLTracklogLoader.GetStartCordinatesOfTrack(this.Filepath).ToString());
+            location.Append("End Location: " );
+            location.Append(XMLTracklogLoader.GetEndCordinatesOfTrack(this.Filepath));
+            locationText.Text = location.ToString();
             
-            locationText.Text = "Start Location: " + XMLTracklogLoader.GetStartCordinatesOfTrack(this.Filepath);
-            
-            locationText.Text += "\nEnd Location: " + XMLTracklogLoader.GetEndCordinatesOfTrack(this.Filepath);
-
             Label trackName = new Label();
             trackName.AutoSize = true;
             trackName.Text = "TrackName: " + XMLTracklogLoader.GetTrackName(this.Filepath);
             List<XMLTracklogLoader.WayPoints> waypoints = XMLTracklogLoader.GetWaypoints(this.Filepath);
             Label waypointHeading = new Label();
+            waypointHeading.Font = new Font(waypointHeading.Font, FontStyle.Bold);
             waypointHeading.Text = "\nWaypoints";
             waypointHeading.AutoSize = true;
             Label waypointLabel = new Label();
             waypointLabel.AutoSize = true;
+            StringBuilder waypointString = new StringBuilder();
             foreach (var point in waypoints)
             {
                 waypointLabel.Text += point.Name+ " " + point.Coordinates + "\n" ; 
@@ -61,14 +66,17 @@ namespace ICT365Assignment1
 
             Label linkHeading = new Label();
             linkHeading.Text = "\nLinks to event: ";
+            linkHeading.Font = new Font(linkHeading.Font, FontStyle.Bold);
             linkHeading.AutoSize = true;
             Label linkLabel = new Label();
             linkLabel.AutoSize = true;
-            foreach(string link in this.Links)
-            {
-                linkLabel.Text += link + "\n";
-            }
+            StringBuilder linkString = new StringBuilder();
             
+            foreach (string link in this.Links)
+            {
+                linkString.AppendLine(link);
+            }
+            linkLabel.Text = linkString.ToString();
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
@@ -80,7 +88,7 @@ namespace ICT365Assignment1
 
             return container;
         }
-        public override bool isValid()
+        public override bool IsValid()
         {
             if (this.Filepath.Trim().Length <= 0)
             {
@@ -116,7 +124,7 @@ namespace ICT365Assignment1
             Bitmap end = new Bitmap(Properties.Resources.end);
             int size = 20;
 
-            mapHelper.AddMarker("tracklog", new Bitmap(end, size, size), new Coordinates(points[0].Lat, points[0].Lng), "Track start\n" + name, this);
+            mapHelper.AddMarker("tracklog", new Bitmap(end, size, size), new Coordinates(points[0].Lat, points[0].Lng), "Date: " + this.Datetimestamp.ToString() + "\nTrack start\n" + name, this);
             mapHelper.AddMarker("tracklog", new Bitmap(start, size,size), new Coordinates(points[points.Count - 1].Lat, points[points.Count - 1].Lng), "Track end\n" + name, this);
             List<XMLTracklogLoader.WayPoints> waypoints = XMLTracklogLoader.GetWaypoints(this.Filepath);
             List<PointLatLng> waypoint = new List<PointLatLng>();

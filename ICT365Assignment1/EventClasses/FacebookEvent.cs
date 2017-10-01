@@ -40,14 +40,18 @@ namespace ICT365Assignment1
             Label infoText = new Label();
             infoText.Text = this.Text;
             Label linkHeading = new Label();
-            linkHeading.Text = "\nLinks to event:";
+            linkHeading.Text = "\nLinks to event: ";
+            linkHeading.Font = new Font(linkHeading.Font, FontStyle.Bold);
             linkHeading.AutoSize = true;
             Label linkLabel = new Label();
             linkLabel.AutoSize = true;
+            StringBuilder linkString = new StringBuilder();
+
             foreach (string link in this.Links)
             {
-                linkLabel.Text += link + "\n";
+                linkString.AppendLine(link);
             }
+            linkLabel.Text = linkString.ToString();
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
@@ -57,7 +61,7 @@ namespace ICT365Assignment1
 
             return container;
         }
-        public override bool isValid()
+        public override bool IsValid()
         {
             if (this.Text.Trim().Length <= 0)
             {
@@ -70,7 +74,7 @@ namespace ICT365Assignment1
             MapHelper mapHelper = MapHelper.Instance();
             
            
-            string tooltip = this.Text;
+            string tooltip = "Date: " + this.Datetimestamp.ToString() + "\n" + this.Text;
             mapHelper.AddMarker("facebook", new Bitmap(Properties.Resources.facebook), this.Location, tooltip, this);
         }
 

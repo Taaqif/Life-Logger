@@ -48,7 +48,16 @@ namespace ICT365Assignment1
             
         private static XDocument Load(string file)
         {
-            XDocument doc = XDocument.Load(file);
+            XDocument doc = null;
+            try
+            {
+                doc = XDocument.Load(file);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("File not found");
+            }
+            
             return doc;
         }
 
@@ -185,13 +194,7 @@ namespace ICT365Assignment1
                     }
                         
                     // Populate detailed track segments 
-                    // in the object model here. 
-                    //sb.Append(
-                    //  string.Format("Track:{0} - Latitude:{1} Longitude:{2} " +
-                    //               "Elevation:{3} Date:{4}\n",
-                    //  trk.Name, trkSeg.Latitude,
-                    //  trkSeg.Longitude, trkSeg.Elevation,
-                    //  trkSeg.Time));
+                    
                 }
                 trackList.Add(track);
             }

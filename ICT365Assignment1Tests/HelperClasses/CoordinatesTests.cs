@@ -12,9 +12,16 @@ namespace ICT365Assignment1.Tests
     public class CoordinatesTests
     {
         [TestMethod()]
-        public void CoordinatesTest()
+        public void CoordinatesConstructorTest()
         {
-            Assert.Fail();
+            //test to make sure the coordinates are not switched
+            double expectedLatitude = -31.950527;
+            double expectedLongitude = 115.860457;
+
+            Coordinates coordinates = new Coordinates(-31.950527, 115.860457);
+
+            Assert.AreEqual(expectedLatitude,coordinates.Latitude);
+            Assert.AreEqual(expectedLongitude, coordinates.Longitude);
         }
     }
 }

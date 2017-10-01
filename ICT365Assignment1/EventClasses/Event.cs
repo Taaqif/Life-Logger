@@ -22,11 +22,11 @@ namespace ICT365Assignment1
         public HashSet<string> Links { get => links; set => links = value; }
 
         private HashSet<string> links = new HashSet<string>();
-        private Coordinates location = new Coordinates();
+        private Coordinates location;
         private DateTime datetimestamp = new DateTime();
         public abstract void Render();
         public abstract XElement ToXElement(XNamespace ns);
         public abstract Panel CreatePanel();
-        public abstract bool isValid();
+        public abstract bool IsValid();
     }
 }

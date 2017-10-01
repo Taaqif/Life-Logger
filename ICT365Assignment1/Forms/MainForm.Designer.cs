@@ -41,6 +41,11 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Toolbox = new System.Windows.Forms.GroupBox();
+            this.mapCoordinatesLabel = new System.Windows.Forms.Label();
+            this.mouseCoordinates = new System.Windows.Forms.Label();
+            this.goToButton = new System.Windows.Forms.Button();
+            this.locationTextBox = new System.Windows.Forms.TextBox();
+            this.mapLocationLabel = new System.Windows.Forms.Label();
             this.InfoLabel = new System.Windows.Forms.Label();
             this.radiusInput = new System.Windows.Forms.TextBox();
             this.searchRadiusLabel = new System.Windows.Forms.Label();
@@ -57,11 +62,6 @@
             this.twitterPictureBox = new System.Windows.Forms.PictureBox();
             this.facebookPictureBox = new System.Windows.Forms.PictureBox();
             this.legendLabel = new System.Windows.Forms.Label();
-            this.mapLocationLabel = new System.Windows.Forms.Label();
-            this.locationTextBox = new System.Windows.Forms.TextBox();
-            this.goToButton = new System.Windows.Forms.Button();
-            this.mouseCoordinates = new System.Windows.Forms.Label();
-            this.mapCoordinatesLabel = new System.Windows.Forms.Label();
             this.mapContextMenu.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.Toolbox.SuspendLayout();
@@ -97,7 +97,7 @@
             this.mapCtrl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.mapCtrl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.mapCtrl.ShowTileGridLines = false;
-            this.mapCtrl.Size = new System.Drawing.Size(758, 640);
+            this.mapCtrl.Size = new System.Drawing.Size(769, 640);
             this.mapCtrl.TabIndex = 0;
             this.mapCtrl.Zoom = 0D;
             this.mapCtrl.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
@@ -195,12 +195,58 @@
             this.Toolbox.Controls.Add(this.radiusInput);
             this.Toolbox.Controls.Add(this.searchRadiusLabel);
             this.Toolbox.Controls.Add(this.ToolboxEventFlowLayout);
-            this.Toolbox.Location = new System.Drawing.Point(776, 27);
+            this.Toolbox.Location = new System.Drawing.Point(787, 27);
             this.Toolbox.Name = "Toolbox";
-            this.Toolbox.Size = new System.Drawing.Size(287, 640);
+            this.Toolbox.Size = new System.Drawing.Size(276, 640);
             this.Toolbox.TabIndex = 5;
             this.Toolbox.TabStop = false;
             this.Toolbox.Text = "Toolbox";
+            // 
+            // mapCoordinatesLabel
+            // 
+            this.mapCoordinatesLabel.AutoSize = true;
+            this.mapCoordinatesLabel.Location = new System.Drawing.Point(70, 71);
+            this.mapCoordinatesLabel.Name = "mapCoordinatesLabel";
+            this.mapCoordinatesLabel.Size = new System.Drawing.Size(49, 13);
+            this.mapCoordinatesLabel.TabIndex = 8;
+            this.mapCoordinatesLabel.Text = "Lat Long";
+            // 
+            // mouseCoordinates
+            // 
+            this.mouseCoordinates.AutoSize = true;
+            this.mouseCoordinates.Location = new System.Drawing.Point(6, 71);
+            this.mouseCoordinates.Name = "mouseCoordinates";
+            this.mouseCoordinates.Size = new System.Drawing.Size(63, 13);
+            this.mouseCoordinates.TabIndex = 7;
+            this.mouseCoordinates.Text = "Coordinates";
+            // 
+            // goToButton
+            // 
+            this.goToButton.Location = new System.Drawing.Point(218, 42);
+            this.goToButton.Name = "goToButton";
+            this.goToButton.Size = new System.Drawing.Size(42, 21);
+            this.goToButton.TabIndex = 6;
+            this.goToButton.Text = "Go";
+            this.goToButton.UseVisualStyleBackColor = true;
+            this.goToButton.Click += new System.EventHandler(this.goToButton_Click);
+            // 
+            // locationTextBox
+            // 
+            this.locationTextBox.Location = new System.Drawing.Point(85, 43);
+            this.locationTextBox.Name = "locationTextBox";
+            this.locationTextBox.Size = new System.Drawing.Size(127, 20);
+            this.locationTextBox.TabIndex = 5;
+            this.locationTextBox.Text = "Perth, WA";
+            this.locationTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.locationTextBox_KeyDown);
+            // 
+            // mapLocationLabel
+            // 
+            this.mapLocationLabel.AutoSize = true;
+            this.mapLocationLabel.Location = new System.Drawing.Point(6, 46);
+            this.mapLocationLabel.Name = "mapLocationLabel";
+            this.mapLocationLabel.Size = new System.Drawing.Size(73, 13);
+            this.mapLocationLabel.TabIndex = 4;
+            this.mapLocationLabel.Text = "Go to location";
             // 
             // InfoLabel
             // 
@@ -241,7 +287,7 @@
             this.ToolboxEventFlowLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.ToolboxEventFlowLayout.Location = new System.Drawing.Point(6, 148);
             this.ToolboxEventFlowLayout.Name = "ToolboxEventFlowLayout";
-            this.ToolboxEventFlowLayout.Size = new System.Drawing.Size(275, 486);
+            this.ToolboxEventFlowLayout.Size = new System.Drawing.Size(264, 486);
             this.ToolboxEventFlowLayout.TabIndex = 0;
             this.ToolboxEventFlowLayout.WrapContents = false;
             // 
@@ -260,7 +306,7 @@
             this.panel1.Controls.Add(this.twitterPictureBox);
             this.panel1.Controls.Add(this.facebookPictureBox);
             this.panel1.Controls.Add(this.legendLabel);
-            this.panel1.Location = new System.Drawing.Point(638, 486);
+            this.panel1.Location = new System.Drawing.Point(649, 486);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(132, 181);
             this.panel1.TabIndex = 6;
@@ -374,52 +420,6 @@
             this.legendLabel.Size = new System.Drawing.Size(81, 24);
             this.legendLabel.TabIndex = 0;
             this.legendLabel.Text = "Legend";
-            // 
-            // mapLocationLabel
-            // 
-            this.mapLocationLabel.AutoSize = true;
-            this.mapLocationLabel.Location = new System.Drawing.Point(6, 46);
-            this.mapLocationLabel.Name = "mapLocationLabel";
-            this.mapLocationLabel.Size = new System.Drawing.Size(73, 13);
-            this.mapLocationLabel.TabIndex = 4;
-            this.mapLocationLabel.Text = "Go to location";
-            // 
-            // locationTextBox
-            // 
-            this.locationTextBox.Location = new System.Drawing.Point(85, 43);
-            this.locationTextBox.Name = "locationTextBox";
-            this.locationTextBox.Size = new System.Drawing.Size(127, 20);
-            this.locationTextBox.TabIndex = 5;
-            this.locationTextBox.Text = "Perth, WA";
-            this.locationTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.locationTextBox_KeyDown);
-            // 
-            // goToButton
-            // 
-            this.goToButton.Location = new System.Drawing.Point(218, 42);
-            this.goToButton.Name = "goToButton";
-            this.goToButton.Size = new System.Drawing.Size(42, 21);
-            this.goToButton.TabIndex = 6;
-            this.goToButton.Text = "Go";
-            this.goToButton.UseVisualStyleBackColor = true;
-            this.goToButton.Click += new System.EventHandler(this.goToButton_Click);
-            // 
-            // mouseCoordinates
-            // 
-            this.mouseCoordinates.AutoSize = true;
-            this.mouseCoordinates.Location = new System.Drawing.Point(6, 71);
-            this.mouseCoordinates.Name = "mouseCoordinates";
-            this.mouseCoordinates.Size = new System.Drawing.Size(63, 13);
-            this.mouseCoordinates.TabIndex = 7;
-            this.mouseCoordinates.Text = "Coordinates";
-            // 
-            // mapCoordinatesLabel
-            // 
-            this.mapCoordinatesLabel.AutoSize = true;
-            this.mapCoordinatesLabel.Location = new System.Drawing.Point(70, 71);
-            this.mapCoordinatesLabel.Name = "mapCoordinatesLabel";
-            this.mapCoordinatesLabel.Size = new System.Drawing.Size(49, 13);
-            this.mapCoordinatesLabel.TabIndex = 8;
-            this.mapCoordinatesLabel.Text = "Lat Long";
             // 
             // MainForm
             // 

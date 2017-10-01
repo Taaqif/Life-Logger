@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 namespace ICT365Assignment1.Tests
 {
     [TestClass()]
-    public class AddEventFormTests
+    public class EventsHelperTests
     {
         [TestMethod()]
-        public void addEventButton_ClickTest()
+        public void IncrementIDTest()
         {
-            Assert.Fail();
+            EventsHelper helper = EventsHelper.Instance();
+            //test if the incrementing the ID works
+            string expectedID = "ID200";
+            Assert.AreEqual(expectedID, helper.IncrementStringID("ID199"));
         }
     }
 }

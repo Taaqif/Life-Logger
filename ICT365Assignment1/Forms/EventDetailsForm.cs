@@ -15,7 +15,7 @@ namespace ICT365Assignment1
     public partial class EventDetailsForm : Form
     {
         private Panel details;
-
+        //allow for details to be set
         public Panel Details { get => details; set => details = value; }
 
         private EventDetailsForm()
@@ -23,6 +23,7 @@ namespace ICT365Assignment1
             InitializeComponent();
             
         }
+        //singleton set up
         private static EventDetailsForm aForm = null;
         public static EventDetailsForm Instance()
         {
@@ -39,6 +40,7 @@ namespace ICT365Assignment1
 
         private void EventDetailsForm_Load(object sender, EventArgs e)
         {
+            //clear the previous events details as it is a singleton
             mainDetailsPanel.Controls.Clear();
             mainDetailsPanel.Controls.Add(Details);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -44,37 +45,41 @@ namespace ICT365Assignment1
             dateText.AutoSize = true;
             dateText.Text = "Date: " + this.Datetimestamp.ToString();
 
-            PictureBox pb = new PictureBox();
-            pb.Image = orig;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            pb.Dock = DockStyle.Fill;
-            pb.Height = 200;
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.Image = orig;
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.Dock = DockStyle.Fill;
+            pictureBox.Height = 200;
             Label filepathText = new Label();
             filepathText.AutoSize = true;
 
             filepathText.Text = this.Filepath;
 
             Label linkHeading = new Label();
-            linkHeading.Text = "\nLinks to event:";
+            linkHeading.Text = "\nLinks to event: ";
+            linkHeading.Font = new Font(linkHeading.Font, FontStyle.Bold);
             linkHeading.AutoSize = true;
             Label linkLabel = new Label();
             linkLabel.AutoSize = true;
+            StringBuilder linkString = new StringBuilder();
+
             foreach (string link in this.Links)
             {
-                linkLabel.Text += link + "\n";
+                linkString.AppendLine(link);
             }
+            linkLabel.Text = linkString.ToString();
 
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
-            container.Controls.Add(pb);
+            container.Controls.Add(pictureBox);
             container.Controls.Add(filepathText);
             container.Controls.Add(linkHeading);
             container.Controls.Add(linkLabel);
 
             return container;
         }
-        public override bool isValid()
+        public override bool IsValid()
         {
             if (this.Filepath.Trim().Length <= 0)
             {
@@ -99,7 +104,7 @@ namespace ICT365Assignment1
             }
             
             MapHelper mh = MapHelper.Instance();
-            mh.AddMarker("video", new Bitmap(thumb, size, size), this.Location, "Video", this);
+            mh.AddMarker("video", new Bitmap(thumb, size, size), this.Location, "Date: " + this.Datetimestamp.ToString() + "\nVideo", this);
 
         }
 

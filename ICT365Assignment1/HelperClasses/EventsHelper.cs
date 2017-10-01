@@ -13,14 +13,23 @@ namespace ICT365Assignment1
 {
     public class EventsHelper
     {
-        MapHelper mh = MapHelper.Instance();
+        MapHelper mapHelper = MapHelper.Instance();
+
         Dictionary<String, Event> EventDictionary = new Dictionary<string, Event>();
-        XNamespace lle = XNamespace.Get("http://www.xyz.org/lifelogevents");
-        XNamespace soapENV = XNamespace.Get("http://www.w3.org/2001/12/soap-envelope");
+
+        XNamespace LLE = XNamespace.Get("http://www.xyz.org/lifelogevents");
+        XNamespace SOAP_ENV = XNamespace.Get("http://www.w3.org/2001/12/soap-envelope");
+
+        String FILE;
+
+        //set up for singleton
         private static EventsHelper aEvent;
-        private string highestID = null;
-        String file;
-        private XDocument doc;
+
+        private string HIGHEST_ID = null;
+
+        
+        private XDocument ROOT_DOCUMENT;
+
         public static EventsHelper Instance()
         {
             if (aEvent == null)
@@ -29,62 +38,75 @@ namespace ICT365Assignment1
             }
             return aEvent;
         }
-        public void loadFromXML(String f)
+        public void loadFromXML(String file)
         {
+            //try loading in a xdocument from the specified file
             XDocument document = null;
-            file = f;
+            FILE = file;
             try
             {
-                document = XDocument.Load(file);
-                
+                document = XDocument.Load(FILE);
             }
             catch (FileNotFoundException)
             {
                 throw new FileNotFoundException("File not found");
             }
-            doc = document;
+            ROOT_DOCUMENT = document;
             PopulateEvents();
            
         }
-        private void IncrementID()
+         //increments a string with the format IDXX where XX is a number
+         //probably need to clarify this function, add a format specifier 
+         //public to be able to unit test
+        public string IncrementStringID(string oldID)
         {
-            highestID = Regex.Replace(highestID, @"(\d+)",
+            return Regex.Replace(oldID, @"(\d+)",
                 m => (Convert.ToInt32(m.Groups[1].Value) + 1).ToString());
         }
-        public void AddEvent(Event e)
+        //adds an event to the dictionary and xml file
+        public void AddEvent(Event @event)
         {
-            if (!e.isValid())
+            //make sure its valid
+            if (!@event.IsValid())
             {
                 throw new ArgumentException("Event is not valid");
             }
             else
             {
-                IncrementID();
-                var newEvent = new XElement(lle + "Event",
-                                new XElement(lle + "eventid", highestID),
-                                new XElement(lle + "link"));
-                newEvent.Add(e.ToXElement(lle));
+                HIGHEST_ID = IncrementStringID(HIGHEST_ID);
+
+                //create a new event xelement
+                XElement newEvent = new XElement(LLE + "Event",
+                                new XElement(LLE + "eventid", HIGHEST_ID),
+                                new XElement(LLE + "link"));
+                //append the events xelement to this one
+                newEvent.Add(@event.ToXElement(LLE));
                 
-                e.ID = highestID;
-                EventDictionary.Add(highestID, e);
-                doc.Descendants(soapENV + "Body").Single().Add(newEvent);
-                doc.Save(file);
-                e.Render();
+                //assign the id
+                @event.ID = HIGHEST_ID;
+                
+                //add it
+                EventDictionary.Add(HIGHEST_ID, @event);
+                ROOT_DOCUMENT.Descendants(SOAP_ENV + "Body").Single().Add(newEvent);
+                //save and render it
+                ROOT_DOCUMENT.Save(FILE);
+                @event.Render();
             }
             
             
         }
-
+        //unlinks two events
         public bool UnLinkEvents(Event event1, Event event2)
         {
             bool unlinked = false;
+            //remove the element from the xeelent entry using linq for both events
             if (event1.Links.Remove(event2.ID))
             {
-                doc.Descendants(lle + "Event")
-                    .Where(id => id.Element(lle + "eventid").Value == event1.ID)
+                ROOT_DOCUMENT.Descendants(LLE + "Event")
+                    .Where(id => id.Element(LLE + "eventid").Value == event1.ID)
                     .Single()
-                    .Element(lle + "link")
-                    .Descendants(lle + "eventid")
+                    .Element(LLE + "link")
+                    .Descendants(LLE + "eventid")
                     .Where(id => id.Value == event2.ID)
                     .Single()
                     .Remove();
@@ -92,54 +114,55 @@ namespace ICT365Assignment1
             }
             if (event2.Links.Remove(event1.ID))
             {
-                doc.Descendants(lle + "Event")
-                    .Where(id => id.Element(lle + "eventid").Value == event2.ID)
+                ROOT_DOCUMENT.Descendants(LLE + "Event")
+                    .Where(id => id.Element(LLE + "eventid").Value == event2.ID)
                     .Single()
-                    .Element(lle + "link")
-                    .Descendants(lle + "eventid")
+                    .Element(LLE + "link")
+                    .Descendants(LLE + "eventid")
                     .Where(id => id.Value == event1.ID)
                     .Single()
                     .Remove();
                 unlinked = true;
             }
+
+            //save the file if successful
             if (unlinked)
             {
-                doc.Save(file);
-                mh.Clear("links_" + event1.ID);
-                mh.Clear("links_" + event2.ID);
+                ROOT_DOCUMENT.Save(FILE);
+                //remove the lines from the map
+                mapHelper.Clear("links_" + event1.ID);
+                mapHelper.Clear("links_" + event2.ID);
             }
-
-
-
             return unlinked;
         }
 
+        //link two events
         public bool LinkEvents(Event event1, Event event2)
         {
             
             bool linked = false;
             if (event1.Links.Add(event2.ID))
             {
-                doc.Descendants(lle + "Event")
-                    .Where(id => id.Element(lle + "eventid").Value == event1.ID)
+                ROOT_DOCUMENT.Descendants(LLE + "Event")
+                    .Where(id => id.Element(LLE + "eventid").Value == event1.ID)
                     .Single()
-                    .Element(lle + "link")
-                    .Add(new XElement(lle + "eventid", event2.ID));
+                    .Element(LLE + "link")
+                    .Add(new XElement(LLE + "eventid", event2.ID));
                 linked = true;
             }
             if (event2.Links.Add(event1.ID))
             {
-                doc.Descendants(lle + "Event")
-                    .Where(id => id.Element(lle + "eventid").Value == event2.ID)
+                ROOT_DOCUMENT.Descendants(LLE + "Event")
+                    .Where(id => id.Element(LLE + "eventid").Value == event2.ID)
                     .Single()
-                    .Element(lle + "link")
-                    .Add(new XElement(lle + "eventid", event1.ID));
+                    .Element(LLE + "link")
+                    .Add(new XElement(LLE + "eventid", event1.ID));
                 linked = true;
             }
             if (linked)
             {
-                doc.Save(file);
-                mh.DrawLine("links", event1.Location, event2.Location, Color.Green);
+                ROOT_DOCUMENT.Save(FILE);
+                mapHelper.DrawLine("links", event1.Location, event2.Location, Color.Green);
             }
             
             
@@ -147,99 +170,110 @@ namespace ICT365Assignment1
             return linked;
             
         }
+        //gets the event by id
         public Event GetEvent(string ID)
         {
             return EventDictionary[ID];
         }
+        //returns a list of the surrounding events
         public List<Event> GetSurroundingEvents(Coordinates coordinates, double radius)
         {
            
             List<Event> eventList = new List<Event>();
-            double KMSconst = 6371;
+            
 
-           
+
             //https://stackoverflow.com/questions/7783684/select-coordinates-which-fall-within-a-radius-of-a-central-point
-           
+
             //find points within a radius using harvoursine formula
+            double havoursineConst = 0.0175;
+            double KMSconst = 6371;
             var e = from ev in EventDictionary
-                        let distance = Math.Acos(Math.Sin(ev.Value.Location.Latitude * 0.0175) *
-                            Math.Sin(coordinates.Latitude * 0.0175) +
-                            Math.Cos(ev.Value.Location.Latitude * 0.0175) *
-                            Math.Cos(coordinates.Latitude * 0.0175) *
-                            Math.Cos((coordinates.Longitude * 0.0175) - (ev.Value.Location.Longitude * 0.0175))
+                        let distance = Math.Acos(Math.Sin(ev.Value.Location.Latitude * havoursineConst) *
+                            Math.Sin(coordinates.Latitude * havoursineConst) +
+                            Math.Cos(ev.Value.Location.Latitude * havoursineConst) *
+                            Math.Cos(coordinates.Latitude * havoursineConst) *
+                            Math.Cos((coordinates.Longitude * havoursineConst) - (ev.Value.Location.Longitude * havoursineConst))
                         ) * KMSconst
                         where distance <= radius
+                        //sort by distance
                         orderby distance
                         select ev.Value;
             return e.ToList<Event>();
         }
-
+        //populates the event dictionary
         private void PopulateEvents()
         {
             //reset the dictionary
             EventDictionary = new Dictionary<string, Event>();
             
-            foreach (XElement @event in doc.Descendants(lle + "Event"))
+            foreach (XElement @event in ROOT_DOCUMENT.Descendants(LLE + "Event"))
             {
                 //TODO: Fix this
-                //assumes the last element will always be the one that contains the event details, which it might not be all the time
+                //assumes the last element will always be the one that contains the event details, 
+                //which it might not be all the time
                 XElement eventDetails = @event.Elements().Last();
                 
-                string id = @event.Element(lle + "eventid").Value;
-                if (id.CompareTo(highestID) > 0)
+                string id = @event.Element(LLE + "eventid").Value;
+                //set the highest ID
+                if (id.CompareTo(HIGHEST_ID) != 0)
                 {
-                    highestID = id;
-                    Console.WriteLine(highestID);
+                    HIGHEST_ID = id;
+                    Console.WriteLine(HIGHEST_ID);
                 }
                 double latitude = 0;
                 double longitude = 0;
                 string datetime = "";
+                //try parsing the location and date form the xml
                 try
                 {
-                    latitude = Double.Parse(eventDetails.Element(lle + "location").Element(lle + "lat").Value);
-                    longitude = Double.Parse(eventDetails.Element(lle + "location").Element(lle + "long").Value);
-                    datetime = eventDetails.Element(lle + "datetimestamp").Value;
+                    latitude = Double.Parse(eventDetails.Element(LLE + "location").Element(LLE + "lat").Value);
+                    longitude = Double.Parse(eventDetails.Element(LLE + "location").Element(LLE + "long").Value);
+                    datetime = eventDetails.Element(LLE + "datetimestamp").Value;
                 }
                 catch (NullReferenceException)
                 {
                     Console.WriteLine("No location or date data for this event found. Skipping");
                 }
 
-                Event t;
+                Event tempEvent;
 
+                //not ideal, fix this
                 switch (eventDetails.Name.LocalName)
                 {
                     case "photo":
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Photo);
-                        t.CustomProperties["Filepath"] = eventDetails.Element(lle + "filepath").Value;
+                        tempEvent = EventFactory.CreateEvent(EventFactory.EventType.Photo);
+                        tempEvent.CustomProperties["Filepath"] = eventDetails.Element(LLE + "filepath").Value;
                         break;
                     case "tweet":
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Twitter);
-                        t.CustomProperties["Text"] = eventDetails.Element(lle + "text").Value;
+                        tempEvent = EventFactory.CreateEvent(EventFactory.EventType.Twitter);
+                        tempEvent.CustomProperties["Text"] = eventDetails.Element(LLE + "text").Value;
                         break;
                     case "facebook-status-update":
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Facebook);
-                        t.CustomProperties["Text"] = eventDetails.Element(lle + "text").Value;
+                        tempEvent = EventFactory.CreateEvent(EventFactory.EventType.Facebook);
+                        tempEvent.CustomProperties["Text"] = eventDetails.Element(LLE + "text").Value;
                         break;
                     case "video":
-                        t = EventFactory.CreateEvent(EventFactory.EventType.Video);
-                        t.CustomProperties["Filepath"] = eventDetails.Element(lle + "filepath").Value;
+                        tempEvent = EventFactory.CreateEvent(EventFactory.EventType.Video);
+                        tempEvent.CustomProperties["Filepath"] = eventDetails.Element(LLE + "filepath").Value;
                         break;
                     
                     case "tracklog":
-                        t = EventFactory.CreateEvent(EventFactory.EventType.TrackLog);
+                        tempEvent = EventFactory.CreateEvent(EventFactory.EventType.TrackLog);
                         //t.Location = new Coordinates(latitude, longitude);
-                        t.CustomProperties["Filepath"] = eventDetails.Element(lle + "filepath").Value;
+                        tempEvent.CustomProperties["Filepath"] = eventDetails.Element(LLE + "filepath").Value;
                         break;
                     default:
                         return;
                 }
-                t.Location = new Coordinates(latitude, longitude);
+                //set the location
+                tempEvent.Location = new Coordinates(latitude, longitude);
+                //set the datetimestamp for the event object
                 if (datetime.Length > 0)
                 {
                     try
                     {
-                        t.Datetimestamp = DateTime.Parse(datetime);
+                        tempEvent.Datetimestamp = DateTime.Parse(datetime);
 
                     }
                     catch (FormatException)
@@ -252,13 +286,14 @@ namespace ICT365Assignment1
                     Console.WriteLine("No date found for event");
                 }
 
-                t.ID = id;
+                //set the id
+                tempEvent.ID = id;
 
                 try
                 {
-                    foreach (XElement linkedEvent in @event.Element(lle + "link").Descendants(lle + "eventid"))
+                    foreach (XElement linkedEvent in @event.Element(LLE + "link").Descendants(LLE + "eventid"))
                     {
-                        t.Links.Add(linkedEvent.Value);
+                        tempEvent.Links.Add(linkedEvent.Value);
                         
                     }
                 }
@@ -267,20 +302,22 @@ namespace ICT365Assignment1
                     Console.WriteLine("No links found");
                 }
                 
-                EventDictionary.Add(id, t);
+                EventDictionary.Add(id, tempEvent);
 
             }
 
         }
+        //render all the evemts to the map
         public void renderEvents()
         {
-            mh.ClearMap();
+            mapHelper.ClearMap();
+            //draw any links that exist between the events
             foreach (var @event in EventDictionary)
             {
                 @event.Value.Render();
                 foreach(string linkID in @event.Value.Links)
                 {
-                    mh.DrawLine("links_" + linkID, @event.Value.Location, GetEvent(linkID).Location, Color.Green);
+                    mapHelper.DrawLine("links_" + linkID, @event.Value.Location, GetEvent(linkID).Location, Color.Green);
                 }
             }
         }

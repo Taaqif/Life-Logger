@@ -8,10 +8,7 @@ namespace ICT365Assignment1
 {
     public class Coordinates
     {
-        public Coordinates()
-        {
-
-        }
+        //only allow one constructor, ensure lat and long gets set
         public Coordinates(double latitude, double longitude)
         {
             Latitude = latitude;
@@ -19,9 +16,8 @@ namespace ICT365Assignment1
         }
         private double latitude;
         private double longitude;
-        //TODO: add string builder 
-        override
-        public string ToString()
+
+        public override string ToString()
         {
             StringBuilder location = new StringBuilder();
             location.Append(this.Latitude);
@@ -29,6 +25,7 @@ namespace ICT365Assignment1
             location.Append(this.Longitude);
             return location.ToString();
         }
+
         public double Latitude { get => latitude; set => latitude = value; }
         public double Longitude { get => longitude; set => longitude = value; }
     }

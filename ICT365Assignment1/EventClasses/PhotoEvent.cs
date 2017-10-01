@@ -35,11 +35,11 @@ namespace ICT365Assignment1
             
             locationText.Text = this.Location.ToString();
 
-            PictureBox pb = new PictureBox();
-            pb.ImageLocation = this.Filepath;
-            pb.Height = 200;
-            pb.SizeMode = PictureBoxSizeMode.Zoom;
-            pb.Dock = DockStyle.Fill;
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.ImageLocation = this.Filepath;
+            pictureBox.Height = 200;
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.Dock = DockStyle.Fill;
             Label filepathText = new Label();
             filepathText.AutoSize = true;
 
@@ -49,25 +49,29 @@ namespace ICT365Assignment1
             dateText.Text = "Date: " + this.Datetimestamp.ToString();
 
             Label linkHeading = new Label();
-            linkHeading.Text = "\nLiks to event:";
+            linkHeading.Text = "\nLinks to event: ";
+            linkHeading.Font = new Font(linkHeading.Font, FontStyle.Bold);
             linkHeading.AutoSize = true;
             Label linkLabel = new Label();
             linkLabel.AutoSize = true;
+            StringBuilder linkString = new StringBuilder();
+
             foreach (string link in this.Links)
             {
-                linkLabel.Text += link + "\n";
+                linkString.AppendLine(link);
             }
+            linkLabel.Text = linkString.ToString();
             container.Controls.Add(eventType);
             container.Controls.Add(locationText);
             container.Controls.Add(dateText);
-            container.Controls.Add(pb);
+            container.Controls.Add(pictureBox);
             container.Controls.Add(filepathText);
             container.Controls.Add(linkHeading);
             container.Controls.Add(linkLabel);
 
             return container;
         }
-        public override bool isValid()
+        public override bool IsValid()
         {
             if (this.Filepath.Trim().Length <= 0)
             {
@@ -96,7 +100,7 @@ namespace ICT365Assignment1
                 thumb = new Bitmap(Properties.Resources.error);
             }
             
-            mh.AddMarker("photo", new Bitmap(thumb, size, size), this.Location, "Photo", this);
+            mh.AddMarker("photo", new Bitmap(thumb, size, size), this.Location, "Date: " + this.Datetimestamp.ToString() + "\nPhoto", this);
 
         }
 

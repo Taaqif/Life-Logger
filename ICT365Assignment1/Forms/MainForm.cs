@@ -19,19 +19,22 @@ namespace ICT365Assignment1
 {
     public partial class MainForm : Form
     {
-        GMapOverlay markers = new GMapOverlay("markers");
-        MapHelper mapHelper;
-        EventsHelper eh;
-        int globalX, globalY;
-        Dictionary<String, Event> EventDictionary = new Dictionary<string, Event>();
+        //setup the helpers
+        MapHelper mapHelper = MapHelper.Instance();
+        EventsHelper eventHelper = EventsHelper.Instance();
+
+        private static int MOUSE_X_COORDINATES, MOUSE_Y_COORDINATES;
+        private static string DEFAULT_LOCATION = "Perth, WA";
+
         private bool link;
-        private HashSet<Event> eventLinks = new HashSet<Event>();
         private bool unlink;
-        private string defaultLocation = "Perth, WA";
+
+        private HashSet<Event> eventLinks = new HashSet<Event>();
 
         public MainForm()
         {
             InitializeComponent();
+            //try loading the file, if not, ask the user to open one
             try
             {
                 loadData("lle.xml");
@@ -45,17 +48,17 @@ namespace ICT365Assignment1
 
         public void loadData(string file)
         {
-            mapHelper = MapHelper.Instance();
-            eh = EventsHelper.Instance();
-            eh.loadFromXML(file);
+            
+            //load the events 
+            eventHelper.loadFromXML(file);
+            //assign a controller
             mapHelper.AssignMapControl(mapCtrl);
+            //configure map
             mapHelper.ConfigMap();
-            if (!mapHelper.SetMapCenterLocation(locationTextBox.Text))
-            {
-                mapHelper.SetMapCenterLocation(defaultLocation);
-                MessageBox.Show("Could not set location, defaulting to " +  defaultLocation);
-            }
-            eh.renderEvents();
+            //set map to default location
+            mapHelper.SetMapCenterLocation(DEFAULT_LOCATION);
+            //render the events
+            eventHelper.renderEvents();
         }
 
         
@@ -66,10 +69,12 @@ namespace ICT365Assignment1
 
         private void mapCtrl_MouseClick(object sender, MouseEventArgs e)
         {
+            //capture the mouse cordinates when the user right clicks
+            //and sow the context menu
             if (e.Button == System.Windows.Forms.MouseButtons.Right && !link)
             {
-                globalX = e.X;
-                globalY = e.Y;
+                MOUSE_X_COORDINATES = e.X;
+                MOUSE_Y_COORDINATES = e.Y;
                 
                 mapContextMenu.Show(mapCtrl, e.Location);
                 
@@ -77,7 +82,7 @@ namespace ICT365Assignment1
             
         }
 
-
+        //prevent the user with a dialog to open
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dlg = new OpenFileDialog())
@@ -92,9 +97,12 @@ namespace ICT365Assignment1
             }
         }
 
+        //executes when the user clicks on a marker 
         private void gmap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
-            if(e.Button == System.Windows.Forms.MouseButtons.Left && item.Tag is Event)
+            //make sure the marker being clikced is an event
+            //and the mouse clikc is left 
+            if(e.Button == MouseButtons.Left && item.Tag is Event)
             {
                 if (link)
                 {
@@ -112,11 +120,9 @@ namespace ICT365Assignment1
                     f.ShowDialog();
                 }
                 
-            }
-            
-            //Console.WriteLine(String.Format("Marker {0} was clicked.", item.Tag));
+            }            
         }
-
+        //removes the two events, call twice to remove
         private void RemoveLink(Event e)
         {
             if (eventLinks.Count < 2)
@@ -126,7 +132,7 @@ namespace ICT365Assignment1
             }
             if (eventLinks.Count == 2)
             {
-                if (eh.UnLinkEvents(eventLinks.ElementAt(0), eventLinks.ElementAt(1)))
+                if (eventHelper.UnLinkEvents(eventLinks.ElementAt(0), eventLinks.ElementAt(1)))
                 {
                     MessageBox.Show("Events unlinked");
                 }
@@ -138,6 +144,7 @@ namespace ICT365Assignment1
             }
         }
 
+        //adds the links, call twice to add
         private void AddLink(Event e)
         {
             if(eventLinks.Count < 2)
@@ -147,7 +154,7 @@ namespace ICT365Assignment1
             }
             if (eventLinks.Count == 2)
             {  
-                if(eh.LinkEvents(eventLinks.ElementAt(0), eventLinks.ElementAt(1)))
+                if(eventHelper.LinkEvents(eventLinks.ElementAt(0), eventLinks.ElementAt(1)))
                 {
                     MessageBox.Show("Events linked");
                 }
@@ -160,7 +167,7 @@ namespace ICT365Assignment1
         }
         private void StopLinking()
         {
-            //reset the links 
+            //reset the linking options
             eventLinks = new HashSet<Event>();
             link = false;
             unlink = false;
@@ -168,46 +175,69 @@ namespace ICT365Assignment1
         }
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
-            Coordinates coordinates = new Coordinates(mapCtrl.FromLocalToLatLng(globalX, globalY).Lat, mapCtrl.FromLocalToLatLng(globalX, globalY).Lng);
+            //get coordinates from the mouse position 
+            Coordinates coordinates = new Coordinates(mapCtrl.FromLocalToLatLng(MOUSE_X_COORDINATES, MOUSE_Y_COORDINATES).Lat, mapCtrl.FromLocalToLatLng(MOUSE_X_COORDINATES, MOUSE_Y_COORDINATES).Lng);
+
             ToolboxEventFlowLayout.Controls.Clear();
+
+            //add a clear button to the form
             Button clearButton = new Button();
             clearButton.Text = "Clear Selection";
             clearButton.Click += new EventHandler(ClearSelection);
             ToolboxEventFlowLayout.Controls.Add(clearButton);
+            
+            //clear the matchlines overlay
             mapHelper.Clear("matchlines");
+
+            //setup for results view
             int numResults = 0;
             int radius = 0;
+            int defaultRadius = 2;
             try
             {
                 radius = Int32.Parse(radiusInput.Text);
-            }catch (FormatException)
+                //make sure its not negative
+                if (radius < 0)
+                {
+                    radius = defaultRadius;
+                }
+            }
+            //default to 2 if the radius is not a correct value
+            catch (FormatException)
             {
-                radius = 2;
+                radius = defaultRadius;
+            }
+            catch (OverflowException)
+            {
+                radius = defaultRadius;
             }
             
-            foreach ( Event ev in eh.GetSurroundingEvents(coordinates, radius))
+            //get the surrounding events and draw aline to each event
+            foreach ( Event ev in eventHelper.GetSurroundingEvents(coordinates, radius))
             {
                 numResults++;
+                
                 mapHelper.DrawLine("matchlines", ev.Location, coordinates, Color.Red);
-
-
                 ToolboxEventFlowLayout.Controls.Add(ev.CreatePanel());
 
             }
-            if(numResults == 0)
+            //assume there will be results
+            Label resultNr = new Label();
+            resultNr.Text = numResults + " results Found. Sorted by closest event";
+            ToolboxEventFlowLayout.Controls.Add(resultNr);
+            //if no results
+            if (numResults == 0)
             {
-                Label resultNr = new Label();
+                resultNr = new Label();
                 resultNr.Text = "No Results Found. Search a different area";
-                ToolboxEventFlowLayout.Controls.Add(resultNr);
             }
-            mapHelper.DrawCircle(coordinates, radius, 50);
+            mapHelper.DrawCircle("circle", coordinates, radius, 50);
         }
 
         private void ClearSelection(object sender, EventArgs e)
         {
             ToolboxEventFlowLayout.Controls.Clear();
-            mapHelper.ClearCircle();
+            mapHelper.Clear("circle");
             mapHelper.Clear("matchlines");
         }
 
@@ -218,14 +248,19 @@ namespace ICT365Assignment1
 
         private void linkEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //clear the toolbox 
             ToolboxEventFlowLayout.Controls.Clear();
+
             Label linkingInfo = new Label();
             linkingInfo.AutoSize = true;
             linkingInfo.Text = "Click on two events to link them";
+            //start linking
             link = true;
+
             Button clearButton = new Button();
             clearButton.Text = "Clear Selection";
             clearButton.Click += new EventHandler(ClearLinksSelection);
+
             ToolboxEventFlowLayout.Controls.Add(clearButton);
             ToolboxEventFlowLayout.Controls.Add(linkingInfo);
         }
@@ -237,8 +272,10 @@ namespace ICT365Assignment1
 
         private void radiusInput_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-        (e.KeyChar != '.'))
+            //only allow digits and a decimal point
+            if (!char.IsControl(e.KeyChar) 
+                && !char.IsDigit(e.KeyChar) 
+                && (e.KeyChar != '.'))
             {
                 e.Handled = true;
             }
@@ -247,29 +284,38 @@ namespace ICT365Assignment1
 
         private void removeLinksToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //clear the toolbox 
             ToolboxEventFlowLayout.Controls.Clear();
+
             Label linkingInfo = new Label();
             linkingInfo.AutoSize = true;
             linkingInfo.Text = "Click on two events to unlink them";
+            //start unlinking
             unlink = true;
             Button clearButton = new Button();
             clearButton.Text = "Clear Selection";
             clearButton.Click += new EventHandler(ClearLinksSelection);
+
             ToolboxEventFlowLayout.Controls.Add(clearButton);
             ToolboxEventFlowLayout.Controls.Add(linkingInfo);
         }
 
         private void goToButton_Click(object sender, EventArgs e)
         {
+            //center the map based on the textbox provided, 
+            //if invalid, default to the default location
             if (!mapHelper.SetMapCenterLocation(locationTextBox.Text))
             {
-                mapHelper.SetMapCenterLocation(defaultLocation);
-                MessageBox.Show("Could not set location, defaulting to " + defaultLocation);
+                mapHelper.SetMapCenterLocation(DEFAULT_LOCATION);
+                MessageBox.Show("Could not set location, defaulting to " + DEFAULT_LOCATION);
             }
         }
 
         private void locationTextBox_KeyDown(object sender, KeyEventArgs e)
         {
+            //if the enter key is pressed
+            //execute the function
+            //prevent the keypress to disable annoying sound 
             if (e.KeyCode == Keys.Enter)
             {
                 goToButton_Click(this, e);
@@ -279,6 +325,7 @@ namespace ICT365Assignment1
 
         private void mapCtrl_MouseMove(object sender, MouseEventArgs e)
         {
+            //keep updating the label with the coordinats of the mouse
             double longitude = mapCtrl.FromLocalToLatLng(e.X, e.Y).Lng;
             double latitude = mapCtrl.FromLocalToLatLng(e.X, e.Y).Lat;
             mapCoordinatesLabel.Text = latitude + " " + longitude;
@@ -286,16 +333,15 @@ namespace ICT365Assignment1
 
         private void insertToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            double longitude = mapCtrl.FromLocalToLatLng(globalX, globalY).Lng;
-            double latitudde = mapCtrl.FromLocalToLatLng(globalX, globalY).Lat;
+            //get the corrdinates 
+            PointLatLng point = mapCtrl.FromLocalToLatLng(MOUSE_X_COORDINATES, MOUSE_Y_COORDINATES);
+            Coordinates coordinates = new Coordinates(point.Lat, point.Lng);
+            
+            //get an instance of the form and set the required details 
+            AddEventForm f = AddEventForm.Instance();
+            f.Coordinate = coordinates;
 
-            AddEventForm f = new AddEventForm()
-            {
-                Latitude = latitudde,
-                Longitude = longitude,
-
-                StartPosition = FormStartPosition.CenterParent
-            };
+            f.StartPosition = FormStartPosition.CenterParent;
             f.ShowDialog(this);
              
         }

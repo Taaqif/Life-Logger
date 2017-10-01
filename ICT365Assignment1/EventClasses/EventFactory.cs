@@ -14,7 +14,8 @@ namespace ICT365Assignment1
             Twitter,
             Photo,
             Video,
-            TrackLog
+            TrackLog,
+            Null
         }
         
         public static Event CreateEvent (EventType e)
@@ -32,7 +33,7 @@ namespace ICT365Assignment1
                 case EventType.TrackLog:
                     return new TrackLogEvent();
                 default:
-                    return null;
+                    return new NullEvent();
             }
         }
     }

@@ -14,18 +14,19 @@ namespace ICT365Assignment1
 {
     public class MapHelper
     {
+        //store all the routes and markers ina dictionary
         private Dictionary<String, GMapOverlay> overlayDictionary = new Dictionary<String, GMapOverlay>();
         private List<GMapOverlay> routeList = new List<GMapOverlay>();
         private GMapControl mapCtrl;
         private static MapHelper aMap;
+        //set up for singleton
         private MapHelper()
         {
 
         }
-        public void AssignMapControl(GMapControl m)
+        public void AssignMapControl(GMapControl mapController)
         {
-            
-            mapCtrl = m;
+            mapCtrl = mapController;
         }
         public static MapHelper Instance()
         {
@@ -35,12 +36,15 @@ namespace ICT365Assignment1
             }
             return aMap;
         }
+        //configures the map using hardcoded data. 
+        //probably allow for more customisation
         public void ConfigMap()
         {
             if (mapCtrl == null)
             {
                 throw new Exception("Please assign a map controller");
             }
+            //GMap.NET specific stuff
             mapCtrl.MapProvider = GMapProviders.GoogleMap;
             
             mapCtrl.MinZoom = 5;
@@ -52,6 +56,7 @@ namespace ICT365Assignment1
             
             mapCtrl.IgnoreMarkerOnMouseWheel = true;
         }
+        //sets the center location
         public bool SetMapCenterLocation(string location)
         {
             if (mapCtrl.SetPositionByKeywords(location) == GeoCoderStatusCode.G_GEO_SUCCESS)
@@ -61,6 +66,7 @@ namespace ICT365Assignment1
 
             return false; ;
         }
+        //adds an overlay to the dictionary, catching any errors and skipping them
         public void AddOverlay(string name)
         {
             if(mapCtrl == null)
@@ -77,6 +83,7 @@ namespace ICT365Assignment1
                 Console.WriteLine("Overlay exists, not adding");
             }
         }
+        //adds a marker to the map, needs a name, an image, coordinates, a tooltip and an event object reference
         public void AddMarker(string overlayName, Bitmap b, Coordinates coordinates, string toolTip, Event e)
         {
             if (mapCtrl == null)
@@ -87,10 +94,14 @@ namespace ICT365Assignment1
             {
                 AddOverlay(overlayName);
             }
+
             GMarkerGoogle marker;
             //to push the marker down slightly, looks neater
-            marker = new GMarkerGoogle(new PointLatLng(coordinates.Latitude - 0.0003, coordinates.Longitude), b);
-            marker.Tag = e;
+            marker = new GMarkerGoogle(new PointLatLng(coordinates.Latitude - 0.0003, coordinates.Longitude), b)
+            {
+                Tag = e
+            };
+            //make sure to catch errors if no tool tip is specified
             if (toolTip != null && toolTip != "")
             {
                 marker.ToolTipText = toolTip;
@@ -102,6 +113,8 @@ namespace ICT365Assignment1
             }
             overlayDictionary[overlayName].Markers.Add(marker);
         }
+        //adds a route using a list of points 
+        //maybe chnage to corrdinates instead
         public void AddRoute(string name, List<PointLatLng> points)
         {
             GMapRoute route = new GMapRoute(points, name);
@@ -109,8 +122,9 @@ namespace ICT365Assignment1
             AddOverlay(name);
             overlayDictionary[name].Routes.Add(route);
         }
+        //drawas acircle on the map using some good ol math found at 
         //https://stackoverflow.com/questions/9308673/how-to-draw-circle-on-the-map-using-gmap-net-in-c-sharp
-        public void DrawCircle(Coordinates coordinates, double radius, int segments)
+        public void DrawCircle(string name, Coordinates coordinates, double radius, int segments)
         {
 
             List<PointLatLng> gpollist = new List<PointLatLng>();
@@ -136,33 +150,25 @@ namespace ICT365Assignment1
             GMarkerGoogle center;
             center = new GMarkerGoogle(new PointLatLng(coordinates.Latitude, coordinates.Longitude), GMarkerGoogleType.lightblue);
 
-            AddOverlay("circle");
-            overlayDictionary["circle"].Clear();
-            overlayDictionary["circle"].Markers.Add(center);
-            overlayDictionary["circle"].Polygons.Add(gpol);
+            AddOverlay(name);
+            overlayDictionary[name].Clear();
+            overlayDictionary[name].Markers.Add(center);
+            overlayDictionary[name].Polygons.Add(gpol);
         }
 
-        public void ClearCircle()
-        {
-            try
-            {
-                overlayDictionary["circle"].Clear();
-            }
-            catch (KeyNotFoundException)
-            {
-                Console.WriteLine("No circles to clear");
-            }
-        }
+        //draws a line form one point to another in a specifed color
         public void DrawLine(string name, Coordinates coordinatesStart, Coordinates coordinatesEnd, Color color)
         {
             GMapOverlay line = new GMapOverlay();
+
             List<PointLatLng> points = new List<PointLatLng>();
             points.Add(new PointLatLng(coordinatesStart.Latitude, coordinatesStart.Longitude));
             points.Add(new PointLatLng(coordinatesEnd.Latitude, coordinatesEnd.Longitude));
+
             GMapRoute route = new GMapRoute(points, "Closest");
             route.Stroke = new Pen(color, 2);
+
             AddOverlay(name);
-            //overlayDictionary["line"].Clear();
             overlayDictionary[name].Routes.Add(route);
             
         }
